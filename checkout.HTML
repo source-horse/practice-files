@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Checkout | Mini Outlet</title>
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --charcoal: #36454F;
+            --blush: #FEC5BB;
+            --white: #FFFFFF;
+            --plum: #4E2A5A;
+            --sage: #B2AC88;
+            --cream: #FFF8DC;
+            --midnight: #191970;
+            --terracotta: #E2725B;
+            --lightgray: #D3D3D3;
+            --radius: 18px;
+            --shadow: 0 4px 24px 0 rgba(30,30,60,0.08);
+        }
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--blush) 100%);
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .checkout-container {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 2.5rem 2rem;
+            max-width: 400px;
+            width: 100%;
+            animation: fadeInUp 0.8s cubic-bezier(.23,1.01,.32,1) both;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        h2 {
+            color: var(--midnight);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+            letter-spacing: 0.02em;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.1rem;
+        }
+        label {
+            color: var(--charcoal);
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+        }
+        input, textarea, select {
+            border: 1.5px solid var(--lightgray);
+            border-radius: var(--radius);
+            padding: 0.7rem 1rem;
+            font-size: 1rem;
+            font-family: inherit;
+            background: var(--cream);
+            transition: border-color 0.2s;
+            outline: none;
+        }
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--plum);
+            background: #fff;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+            max-height: 120px;
+        }
+        select {
+            appearance: none;
+            background: var(--cream) url('data:image/svg+xml;utf8,<svg fill="gray" height="16" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M7.293 7.293a1 1 0 011.414 0L10 8.586l1.293-1.293a1 1 0 111.414 1.414l-2 2a1 1 0 01-1.414 0l-2-2a1 1 0 010-1.414z"/></svg>') no-repeat right 1rem center/1rem;
+        }
+        button {
+            background: linear-gradient(90deg, var(--plum), var(--terracotta));
+            color: var(--white);
+            border: none;
+            border-radius: var(--radius);
+            padding: 0.9rem 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            box-shadow: 0 2px 8px 0 rgba(78,42,90,0.08);
+            transition: background 0.2s, transform 0.1s;
+        }
+        button:hover, button:focus {
+            background: linear-gradient(90deg, var(--midnight), var(--sage));
+            transform: translateY(-2px) scale(1.03);
+        }
+        .confirmation {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+            animation: fadeInUp 0.7s cubic-bezier(.23,1.01,.32,1) both;
+        }
+        .confirmation h3 {
+            color: var(--plum);
+            font-size: 1.5rem;
+            margin-bottom: 0.7rem;
+            font-weight: 600;
+        }
+        .confirmation p {
+            color: var(--charcoal);
+            font-size: 1.1rem;
+            margin-bottom: 1.2rem;
+        }
+        .confirmation .icon {
+            font-size: 2.5rem;
+            color: var(--sage);
+            margin-bottom: 1rem;
+            animation: pop 0.5s cubic-bezier(.23,1.01,.32,1);
+        }
+        @keyframes pop {
+            0% { transform: scale(0.7);}
+            80% { transform: scale(1.15);}
+            100% { transform: scale(1);}
+        }
+        @media (max-width: 500px) {
+            .checkout-container {
+                padding: 1.2rem 0.5rem;
+                max-width: 98vw;
+            }
+            h2 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="checkout-container" id="checkoutBox">
+        <h2>Checkout</h2>
+        <form id="checkoutForm" autocomplete="off">
+            <div>
+                <label for="fullname">Full Name</label>
+                <input type="text" id="fullname" name="fullname" required autocomplete="name" />
+            </div>
+            <div>
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required autocomplete="email" />
+            </div>
+            <div>
+                <label for="address">Shipping Address</label>
+                <textarea id="address" name="address" required autocomplete="street-address"></textarea>
+            </div>
+            <div>
+                <label for="payment">Payment Method</label>
+                <select id="payment" name="payment" required>
+                    <option value="" disabled selected>Select a payment method</option>
+                    <option value="credit">Credit Card</option>
+                    <option value="paypal">PayPal</option>
+                    <option value="applepay">Apple Pay</option>
+                </select>
+            </div>
+            <button type="submit">Place Order</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const box = document.getElementById('checkoutBox');
+            box.innerHTML = `
+                <div class="confirmation">
+                    <div class="icon">🎉</div>
+                    <h3>Thank you for your order!</h3>
+                    <p>Your order has been received and is being processed.</p>
+                </div>
+            `;
+        });
+    </script>
+</body>
+</html>

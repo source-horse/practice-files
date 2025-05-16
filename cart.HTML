@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shopping Cart - Mini Outlet</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Inter font -->
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --charcoal: #36454F;
+            --blush: #FEC5BB;
+            --white: #FFFFFF;
+            --plum: #4E2A5A;
+            --sage: #B2AC88;
+            --cream: #FFF8DC;
+            --midnight: #191970;
+            --terracotta: #E2725B;
+            --lightgray: #D3D3D3;
+            --shadow: 0 4px 16px rgba(30, 30, 60, 0.08);
+            --radius: 18px;
+            --transition: 0.2s cubic-bezier(.4,0,.2,1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--cream);
+            margin: 0;
+            color: var(--charcoal);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-container {
+            max-width: 700px;
+            margin: 40px auto 0 auto;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 32px 24px 24px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .cart-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--midnight);
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .cart-items {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            background: var(--cream);
+            border-radius: var(--radius);
+            box-shadow: 0 2px 8px rgba(78,42,90,0.07);
+            padding: 18px 16px;
+            gap: 18px;
+            transition: box-shadow var(--transition);
+        }
+        .cart-item:hover {
+            box-shadow: 0 6px 24px rgba(78,42,90,0.13);
+        }
+
+        .item-img {
+            width: 72px;
+            height: 72px;
+            border-radius: 14px;
+            object-fit: cover;
+            background: var(--lightgray);
+            box-shadow: 0 2px 8px rgba(30,30,60,0.06);
+        }
+
+        .item-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .item-name {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--plum);
+        }
+
+        .item-price {
+            color: var(--terracotta);
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .item-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .qty-control {
+            display: flex;
+            align-items: center;
+            background: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 1px 4px rgba(30,30,60,0.07);
+            overflow: hidden;
+        }
+
+        .qty-btn {
+            background: var(--sage);
+            border: none;
+            color: var(--midnight);
+            font-size: 1.1rem;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            transition: background var(--transition), transform var(--transition);
+            font-weight: 700;
+            outline: none;
+        }
+        .qty-btn:hover {
+            background: var(--blush);
+            transform: scale(1.08);
+        }
+
+        .qty-value {
+            width: 32px;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--charcoal);
+            background: transparent;
+            border: none;
+            outline: none;
+        }
+
+        .remove-btn {
+            background: var(--terracotta);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            padding: 7px 14px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
+            box-shadow: 0 1px 4px rgba(226,114,91,0.09);
+        }
+        .remove-btn:hover {
+            background: var(--midnight);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 4px 16px rgba(25,25,112,0.13);
+        }
+
+        .cart-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 18px;
+            padding-top: 18px;
+            border-top: 2px solid var(--lightgray);
+        }
+
+        .total-label {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--charcoal);
+        }
+        .total-price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--plum);
+            letter-spacing: 1px;
+        }
+
+        .checkout-btn {
+            margin-top: 24px;
+            width: 100%;
+            padding: 16px 0;
+            background: linear-gradient(90deg, var(--midnight) 0%, var(--plum) 100%);
+            color: var(--cream);
+            font-size: 1.2rem;
+            font-weight: 700;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(30,30,60,0.10);
+            transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+            letter-spacing: 1px;
+            outline: none;
+            position: relative;
+            overflow: hidden;
+        }
+        .checkout-btn::after {
+            content: "";
+            position: absolute;
+            left: 0; top: 0; right: 0; bottom: 0;
+            background: linear-gradient(90deg, var(--blush) 0%, var(--sage) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 0;
+        }
+        .checkout-btn:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 8px 32px rgba(30,30,60,0.13);
+        }
+        .checkout-btn:hover::after {
+            opacity: 0.12;
+        }
+
+        @media (max-width: 600px) {
+            .cart-container {
+                padding: 14px 4vw 18px 4vw;
+                max-width: 98vw;
+            }
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .item-img {
+                width: 56px;
+                height: 56px;
+            }
+            .cart-summary {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cart-container">
+        <div class="cart-title">Your Cart</div>
+        <div class="cart-items" id="cart-items">
+            <!-- Example cart item -->
+            <div class="cart-item" data-price="49.99">
+                <img class="item-img" src="https://images.unsplash.com/photo-1513708927688-890fe41c3c34?auto=format&fit=crop&w=200&q=80" alt="Product 1">
+                <div class="item-details">
+                    <div class="item-name">Wireless Headphones</div>
+                    <div class="item-price">$49.99</div>
+                </div>
+                <div class="item-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this, -1)">−</button>
+                        <input class="qty-value" type="text" value="1" readonly>
+                        <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+                    </div>
+                    <button class="remove-btn" onclick="removeItem(this)">Remove</button>
+                </div>
+            </div>
+            <div class="cart-item" data-price="29.50">
+                <img class="item-img" src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=200&q=80" alt="Product 2">
+                <div class="item-details">
+                    <div class="item-name">Ceramic Mug</div>
+                    <div class="item-price">$29.50</div>
+                </div>
+                <div class="item-actions">
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(this, -1)">−</button>
+                        <input class="qty-value" type="text" value="2" readonly>
+                        <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+                    </div>
+                    <button class="remove-btn" onclick="removeItem(this)">Remove</button>
+                </div>
+            </div>
+        </div>
+        <div class="cart-summary">
+            <span class="total-label">Total</span>
+            <span class="total-price" id="total-price">$0.00</span>
+        </div>
+        <button class="checkout-btn">Proceed to Checkout</button>
+    </div>
+    <script>
+        function updateTotal() {
+            let total = 0;
+            document.querySelectorAll('.cart-item').forEach(item => {
+                const price = parseFloat(item.getAttribute('data-price'));
+                const qty = parseInt(item.querySelector('.qty-value').value, 10);
+                total += price * qty;
+            });
+            document.getElementById('total-price').textContent = '$' + total.toFixed(2);
+        }
+
+        function changeQty(btn, delta) {
+            const qtyInput = btn.parentElement.querySelector('.qty-value');
+            let qty = parseInt(qtyInput.value, 10);
+            qty = Math.max(1, qty + delta);
+            qtyInput.value = qty;
+            updateTotal();
+        }
+
+        function removeItem(btn) {
+            const item = btn.closest('.cart-item');
+            item.parentElement.removeChild(item);
+            updateTotal();
+        }
+
+        // Initial total calculation
+        updateTotal();
+    </script>
+</body>
+</html>
