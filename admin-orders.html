@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>MiniMart - Admin Orders</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap" rel="stylesheet">
+    <style>
+        /* Import admin portal styles */
+        @import url('admin-portal.css');
+
+        .order-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-input {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--lightgray);
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+        }
+
+        .order-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .stat-title {
+            color: var(--charcoal);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--plum);
+        }
+
+        .order-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .order-items {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--lightgray);
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: var(--radius);
+        }
+
+        .bulk-actions {
+            background: var(--white);
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="admin-portal.html" class="logo">MiniMart Admin</a>
+        <nav>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="admin-portal.html" class="nav-link">
+                        📊 <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-users.html" class="nav-link">
+                        👥 <span>Users</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-products.html" class="nav-link">
+                        📦 <span>Products</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-orders.html" class="nav-link active">
+                        🛍️ <span>Orders</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-finance.html" class="nav-link">
+                        💰 <span>Finance</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-marketing.html" class="nav-link">
+                        📢 <span>Marketing</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-content.html" class="nav-link">
+                        📝 <span>Content</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-support.html" class="nav-link">
+                        🎯 <span>Support</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-settings.html" class="nav-link">
+                        ⚙️ <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="header">
+            <h1>Orders Management</h1>
+            <div class="user-menu">
+                <div class="notifications">
+                    <span class="notification-badge">3</span>
+                    🔔
+                </div>
+                <div class="user-profile">
+                    Admin User
+                </div>
+            </div>
+        </header>
+
+        <div class="order-stats">
+            <div class="stat-card">
+                <div class="stat-title">Total Orders</div>
+                <div class="stat-value">1,248</div>
+                <div class="trend-up">↑ 12% vs last month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Pending Orders</div>
+                <div class="stat-value">24</div>
+                <div class="trend-down">↓ 3% vs last month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Completed Orders</div>
+                <div class="stat-value">1,156</div>
+                <div class="trend-up">↑ 8% vs last month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Cancelled Orders</div>
+                <div class="stat-value">68</div>
+                <div class="trend-down">↓ 5% vs last month</div>
+            </div>
+        </div>
+
+        <div class="bulk-actions">
+            <button class="action-button">
+                📥 Export Orders
+            </button>
+            <button class="action-button secondary">
+                🖨️ Print Orders
+            </button>
+            <button class="action-button secondary">
+                📊 Generate Report
+            </button>
+        </div>
+
+        <div class="order-filters">
+            <input type="text" class="filter-input" placeholder="Search orders...">
+            <select class="filter-input">
+                <option value="">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="processing">Processing</option>
+                <option value="shipped">Shipped</option>
+                <option value="delivered">Delivered</option>
+                <option value="cancelled">Cancelled</option>
+            </select>
+            <input type="date" class="filter-input">
+            <select class="filter-input">
+                <option value="date">Sort by Date</option>
+                <option value="status">Sort by Status</option>
+                <option value="amount">Sort by Amount</option>
+            </select>
+        </div>
+
+        <div class="chart-container">
+            <h2>Recent Orders</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Date</th>
+                        <th>Items</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#12345</td>
+                        <td>John Doe</td>
+                        <td>2024-03-15</td>
+                        <td>3 items</td>
+                        <td>$399.97</td>
+                        <td><span class="status-badge completed">Delivered</span></td>
+                        <td>
+                            <button class="action-button">View</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>#12346</td>
+                        <td>Jane Smith</td>
+                        <td>2024-03-15</td>
+                        <td>2 items</td>
+                        <td>$199.98</td>
+                        <td><span class="status-badge pending">Processing</span></td>
+                        <td>
+                            <button class="action-button">View</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>#12347</td>
+                        <td>Mike Johnson</td>
+                        <td>2024-03-14</td>
+                        <td>1 item</td>
+                        <td>$699.99</td>
+                        <td><span class="status-badge cancelled">Cancelled</span></td>
+                        <td>
+                            <button class="action-button">View</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="chart-container">
+            <h2>Order Details #12345</h2>
+            <div class="order-details">
+                <div>
+                    <h3>Customer Information</h3>
+                    <p>Name: John Doe</p>
+                    <p>Email: john@example.com</p>
+                    <p>Phone: (555) 123-4567</p>
+                    <p>Address: 123 Main St, City, Country</p>
+                </div>
+                <div>
+                    <h3>Order Items</h3>
+                    <ul class="order-items">
+                        <li class="order-item">
+                            <img src="https://via.placeholder.com/50" alt="Wireless Earbuds" class="item-image">
+                            <div>
+                                <h4>Wireless Earbuds</h4>
+                                <p>$129.99 x 1</p>
+                            </div>
+                        </li>
+                        <li class="order-item">
+                            <img src="https://via.placeholder.com/50" alt="Smart Coffee Maker" class="item-image">
+                            <div>
+                                <h4>Smart Coffee Maker</h4>
+                                <p>$199.99 x 1</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Navigation active state
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html> 

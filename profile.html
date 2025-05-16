@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>MiniMart - My Profile</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --charcoal: #36454F;
+            --blush: #FEC5BB;
+            --white: #FFFFFF;
+            --plum: #4E2A5A;
+            --sage: #B2AC88;
+            --cream: #FFF8DC;
+            --midnight: #191970;
+            --terracotta: #E2725B;
+            --lightgray: #D3D3D3;
+            --shadow: 0 4px 16px rgba(30,30,60,0.07);
+            --radius: 16px;
+            --transition: 0.2s cubic-bezier(.4,0,.2,1);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Montserrat', Arial, sans-serif;
+            background: var(--cream);
+            color: var(--charcoal);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--midnight);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .navbar .logo {
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: var(--blush);
+            text-decoration: none;
+        }
+
+        .profile-container {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .profile-header {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--lightgray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--midnight);
+            font-weight: 600;
+        }
+
+        .profile-info h1 {
+            margin: 0 0 0.5rem 0;
+            color: var(--plum);
+        }
+
+        .profile-info p {
+            margin: 0;
+            color: var(--charcoal);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 1rem 2rem;
+            background: var(--white);
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--charcoal);
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .tab-button.active {
+            background: var(--plum);
+            color: var(--white);
+        }
+
+        .tab-content {
+            display: none;
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--lightgray);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: border-color var(--transition);
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--sage);
+        }
+
+        .save-btn {
+            background: linear-gradient(90deg, var(--blush), var(--sage));
+            color: var(--midnight);
+            border: none;
+            border-radius: var(--radius);
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(30,30,60,0.15);
+        }
+
+        .order-card {
+            border: 1px solid var(--lightgray);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--lightgray);
+        }
+
+        .address-card {
+            border: 1px solid var(--lightgray);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .address-card .default-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--sage);
+            color: var(--white);
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+        }
+
+        .notification-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--lightgray);
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--sage);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        .security-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid var(--lightgray);
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .profile-container {
+                padding: 1rem;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+                padding: 1.5rem;
+            }
+
+            .tab-button {
+                flex: 1;
+                padding: 0.8rem;
+                text-align: center;
+            }
+
+            .tab-content {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="Home page .HTML" class="logo">MiniMart</a>
+        <div style="display: flex; align-items: center; gap: 1.5rem;">
+            <a href="Home page .HTML" style="color: var(--white); text-decoration: none;">Back to Shop</a>
+        </div>
+    </nav>
+
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="profile-avatar">JD</div>
+            <div class="profile-info">
+                <h1>John Doe</h1>
+                <p>john.doe@example.com</p>
+                <p>Member since January 2024</p>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" data-tab="account">Account Settings</button>
+            <button class="tab-button" data-tab="orders">Orders</button>
+            <button class="tab-button" data-tab="addresses">Addresses</button>
+            <button class="tab-button" data-tab="payment">Payment Methods</button>
+            <button class="tab-button" data-tab="notifications">Notifications</button>
+            <button class="tab-button" data-tab="security">Security</button>
+        </div>
+
+        <!-- Account Settings Tab -->
+        <div class="tab-content active" id="account">
+            <h2>Personal Information</h2>
+            <form id="profile-form">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" value="John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" value="john.doe@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" value="+1 (555) 123-4567">
+                </div>
+                <button type="submit" class="save-btn">Save Changes</button>
+            </form>
+        </div>
+
+        <!-- Orders Tab -->
+        <div class="tab-content" id="orders">
+            <h2>Order History</h2>
+            <div class="order-card">
+                <div class="order-header">
+                    <div>
+                        <strong>Order #12345</strong>
+                        <p>Placed on January 15, 2024</p>
+                    </div>
+                    <div>
+                        <span class="status">Delivered</span>
+                        <p>$249.99</p>
+                    </div>
+                </div>
+                <div class="order-items">
+                    <p>2 items: Wireless Earbuds, Smart Coffee Maker</p>
+                    <button class="save-btn">View Details</button>
+                </div>
+            </div>
+            <!-- More order cards would go here -->
+        </div>
+
+        <!-- Addresses Tab -->
+        <div class="tab-content" id="addresses">
+            <h2>Saved Addresses</h2>
+            <div class="address-card">
+                <span class="default-badge">Default</span>
+                <h3>Home</h3>
+                <p>123 Main Street</p>
+                <p>Apt 4B</p>
+                <p>New York, NY 10001</p>
+                <button class="save-btn">Edit</button>
+            </div>
+            <!-- More address cards would go here -->
+            <button class="save-btn" style="margin-top: 1rem;">Add New Address</button>
+        </div>
+
+        <!-- Payment Methods Tab -->
+        <div class="tab-content" id="payment">
+            <h2>Payment Methods</h2>
+            <div class="payment-methods">
+                <!-- Credit Cards -->
+                <div class="form-group">
+                    <h3>Saved Cards</h3>
+                    <div class="payment-card">
+                        <p>•••• •••• •••• 1234</p>
+                        <p>Expires 12/25</p>
+                        <button class="save-btn">Remove</button>
+                    </div>
+                </div>
+                <button class="save-btn" style="margin-top: 1rem;">Add New Card</button>
+            </div>
+        </div>
+
+        <!-- Notifications Tab -->
+        <div class="tab-content" id="notifications">
+            <h2>Notification Preferences</h2>
+            <div class="notification-item">
+                <div>
+                    <h3>Order Updates</h3>
+                    <p>Get notifications about your order status</p>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="notification-item">
+                <div>
+                    <h3>Promotions</h3>
+                    <p>Receive updates about sales and special offers</p>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <!-- More notification options would go here -->
+        </div>
+
+        <!-- Security Tab -->
+        <div class="tab-content" id="security">
+            <h2>Security Settings</h2>
+            <div class="security-option">
+                <div>
+                    <h3>Two-Factor Authentication</h3>
+                    <p>Add an extra layer of security to your account</p>
+                </div>
+                <button class="save-btn">Enable</button>
+            </div>
+            <div class="security-option">
+                <div>
+                    <h3>Change Password</h3>
+                    <p>Update your password regularly for better security</p>
+                </div>
+                <button class="save-btn">Update</button>
+            </div>
+            <div class="security-option">
+                <div>
+                    <h3>Login History</h3>
+                    <p>View your recent login activity</p>
+                </div>
+                <button class="save-btn">View</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and content
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding content
+                button.classList.add('active');
+                document.getElementById(button.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Form submission handling
+        document.getElementById('profile-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Profile updated successfully!');
+        });
+    </script>
+</body>
+</html> 

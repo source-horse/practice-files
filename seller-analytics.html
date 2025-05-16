@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>MiniMart - Seller Analytics</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap" rel="stylesheet">
+    <style>
+        /* Import base styles from seller-portal.html */
+        @import url('seller-portal.css');
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .analytics-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .metric-title {
+            font-size: 0.9rem;
+            color: var(--charcoal);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--plum);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-trend {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .trend-up {
+            color: var(--success);
+        }
+
+        .trend-down {
+            color: var(--danger);
+        }
+
+        .chart-container {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .chart-filters {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .filter-button {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--lightgray);
+            border-radius: var(--radius);
+            background: var(--white);
+            cursor: pointer;
+        }
+
+        .filter-button.active {
+            background: var(--plum);
+            color: var(--white);
+            border-color: var(--plum);
+        }
+
+        .chart-area {
+            height: 300px;
+            position: relative;
+        }
+
+        .insights-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .insight-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .insight-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .insight-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--plum);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.2rem;
+        }
+
+        .insight-title {
+            font-weight: 600;
+            color: var(--charcoal);
+        }
+
+        .insight-content {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--charcoal);
+        }
+
+        .insight-action {
+            margin-top: 1rem;
+        }
+
+        .performance-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .performance-table th,
+        .performance-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--lightgray);
+        }
+
+        .performance-table th {
+            font-weight: 600;
+            color: var(--charcoal);
+        }
+
+        .performance-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        .indicator-high {
+            background: var(--success);
+        }
+
+        .indicator-medium {
+            background: var(--warning);
+        }
+
+        .indicator-low {
+            background: var(--danger);
+        }
+
+        .export-section {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="seller-portal.html" class="logo">Seller Portal</a>
+        <nav>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="seller-portal.html" class="nav-link">
+                        📊 <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-products.html" class="nav-link">
+                        📦 <span>Products</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-orders.html" class="nav-link">
+                        🛍️ <span>Orders</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-earnings.html" class="nav-link">
+                        💰 <span>Earnings</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-analytics.html" class="nav-link active">
+                        📈 <span>Analytics</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-marketing.html" class="nav-link">
+                        🎯 <span>Marketing</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-messages.html" class="nav-link">
+                        💬 <span>Messages</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-settings.html" class="nav-link">
+                        ⚙️ <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="header">
+            <h1>Analytics</h1>
+            <div class="user-menu">
+                <div class="notifications">
+                    <span class="notification-badge">2</span>
+                    🔔
+                </div>
+                <div class="user-profile">
+                    Seller Store
+                </div>
+            </div>
+        </header>
+
+        <div class="export-section">
+            <button class="action-button" onclick="analyticsManager.exportReport('pdf')">
+                📄 Export PDF Report
+            </button>
+            <button class="action-button secondary" onclick="analyticsManager.exportReport('csv')">
+                📊 Export CSV Data
+            </button>
+        </div>
+
+        <div class="analytics-grid">
+            <div class="analytics-card">
+                <div class="metric-title">Conversion Rate</div>
+                <div class="metric-value">3.2%</div>
+                <div class="metric-trend trend-up">
+                    ↑ 0.5% vs last week
+                </div>
+            </div>
+            <div class="analytics-card">
+                <div class="metric-title">Average Order Value</div>
+                <div class="metric-value">$85.40</div>
+                <div class="metric-trend trend-up">
+                    ↑ $12.30 vs last week
+                </div>
+            </div>
+            <div class="analytics-card">
+                <div class="metric-title">Customer Retention</div>
+                <div class="metric-value">68%</div>
+                <div class="metric-trend trend-down">
+                    ↓ 2% vs last week
+                </div>
+            </div>
+            <div class="analytics-card">
+                <div class="metric-title">Cart Abandonment</div>
+                <div class="metric-value">24%</div>
+                <div class="metric-trend trend-up">
+                    ↑ Better by 3%
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-header">
+                <h2>Sales Performance</h2>
+                <div class="chart-filters">
+                    <button class="filter-button active" data-period="week">Week</button>
+                    <button class="filter-button" data-period="month">Month</button>
+                    <button class="filter-button" data-period="year">Year</button>
+                </div>
+            </div>
+            <div class="chart-area" id="salesChart">
+                <!-- Chart will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <div class="insights-section">
+            <div class="insight-card">
+                <div class="insight-header">
+                    <div class="insight-icon">📈</div>
+                    <div class="insight-title">Top Performing Products</div>
+                </div>
+                <div class="insight-content">
+                    <table class="performance-table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Sales</th>
+                                <th>Performance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="topProductsTable">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="insight-card">
+                <div class="insight-header">
+                    <div class="insight-icon">🎯</div>
+                    <div class="insight-title">Customer Segments</div>
+                </div>
+                <div class="insight-content">
+                    <div id="customerSegments">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            <div class="insight-card">
+                <div class="insight-header">
+                    <div class="insight-icon">💡</div>
+                    <div class="insight-title">Recommendations</div>
+                </div>
+                <div class="insight-content">
+                    <div id="recommendations">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        class AnalyticsManager {
+            constructor() {
+                this.topProducts = [
+                    {
+                        name: 'Wireless Earbuds',
+                        sales: 128,
+                        performance: 'high'
+                    },
+                    {
+                        name: 'Smart Coffee Maker',
+                        sales: 64,
+                        performance: 'medium'
+                    },
+                    {
+                        name: '4K Smart TV',
+                        sales: 32,
+                        performance: 'low'
+                    }
+                ];
+
+                this.customerSegments = [
+                    {
+                        name: 'Loyal Customers',
+                        percentage: 35,
+                        growth: 5
+                    },
+                    {
+                        name: 'Regular Buyers',
+                        percentage: 45,
+                        growth: 2
+                    },
+                    {
+                        name: 'One-time Buyers',
+                        percentage: 20,
+                        growth: -3
+                    }
+                ];
+
+                this.recommendations = [
+                    {
+                        title: 'Improve Product Stock',
+                        description: 'Low stock alerts for top-selling items. Consider restocking Wireless Earbuds.',
+                        priority: 'high'
+                    },
+                    {
+                        title: 'Customer Retention',
+                        description: 'Slight decrease in retention rate. Consider implementing a loyalty program.',
+                        priority: 'medium'
+                    },
+                    {
+                        title: 'Price Optimization',
+                        description: 'Products in the electronics category show price sensitivity. Consider adjustments.',
+                        priority: 'low'
+                    }
+                ];
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.refreshTopProducts();
+                this.refreshCustomerSegments();
+                this.refreshRecommendations();
+                this.updateSalesChart('week');
+            }
+
+            setupEventListeners() {
+                document.querySelectorAll('.filter-button').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
+                        e.target.classList.add('active');
+                        this.updateSalesChart(e.target.dataset.period);
+                    });
+                });
+            }
+
+            refreshTopProducts() {
+                const tbody = document.getElementById('topProductsTable');
+                tbody.innerHTML = this.topProducts.map(product => `
+                    <tr>
+                        <td>${product.name}</td>
+                        <td>${product.sales}</td>
+                        <td>
+                            <span class="performance-indicator indicator-${product.performance}"></span>
+                            ${product.performance}
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            refreshCustomerSegments() {
+                const container = document.getElementById('customerSegments');
+                container.innerHTML = this.customerSegments.map(segment => `
+                    <div class="segment-item">
+                        <h3>${segment.name}</h3>
+                        <div class="segment-stats">
+                            <div class="segment-percentage">${segment.percentage}%</div>
+                            <div class="segment-growth ${segment.growth >= 0 ? 'trend-up' : 'trend-down'}">
+                                ${segment.growth >= 0 ? '↑' : '↓'} ${Math.abs(segment.growth)}%
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            refreshRecommendations() {
+                const container = document.getElementById('recommendations');
+                container.innerHTML = this.recommendations.map(rec => `
+                    <div class="recommendation-item">
+                        <h3>${rec.title}</h3>
+                        <p>${rec.description}</p>
+                        <span class="status-badge ${rec.priority}">${rec.priority} priority</span>
+                    </div>
+                `).join('');
+            }
+
+            updateSalesChart(period) {
+                const data = this.generateChartData(period);
+                const container = document.getElementById('salesChart');
+                
+                container.innerHTML = `
+                    <div class="chart-bars">
+                        ${data.map(item => `
+                            <div class="chart-bar" style="height: ${(item.value / data.maxValue) * 100}%">
+                                <span class="chart-bar-value">${this.formatCurrency(item.value)}</span>
+                                <span class="chart-bar-label">${item.label}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            generateChartData(period) {
+                let data = [];
+                const maxValue = 5000;
+
+                switch(period) {
+                    case 'week':
+                        data = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => ({
+                            label: day,
+                            value: Math.random() * maxValue
+                        }));
+                        break;
+                    case 'month':
+                        data = Array.from({length: 12}, (_, i) => ({
+                            label: `Week ${i + 1}`,
+                            value: Math.random() * maxValue
+                        }));
+                        break;
+                    case 'year':
+                        data = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map(month => ({
+                            label: month,
+                            value: Math.random() * maxValue
+                        }));
+                        break;
+                }
+
+                data.maxValue = maxValue;
+                return data;
+            }
+
+            formatCurrency(amount) {
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD'
+                }).format(amount);
+            }
+
+            exportReport(format) {
+                const timestamp = new Date().toISOString().split('T')[0];
+                const filename = `analytics-report-${timestamp}.${format}`;
+                
+                alert(`Exporting ${format.toUpperCase()} report: ${filename}\nThis is a demo feature.`);
+            }
+        }
+
+        // Initialize AnalyticsManager
+        const analyticsManager = new AnalyticsManager();
+        analyticsManager.init();
+    </script>
+</body>
+</html> 

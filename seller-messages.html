@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>MiniMart - Seller Messages</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap" rel="stylesheet">
+    <style>
+        /* Import base styles from seller-portal.html */
+        @import url('seller-portal.css');
+
+        .messages-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 1rem;
+            height: calc(100vh - 80px);
+        }
+
+        .conversations-list {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .conversations-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--lightgray);
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--lightgray);
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .filter-button {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--lightgray);
+            border-radius: var(--radius);
+            background: var(--white);
+            cursor: pointer;
+        }
+
+        .filter-button.active {
+            background: var(--plum);
+            color: var(--white);
+            border-color: var(--plum);
+        }
+
+        .conversations {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .conversation-item {
+            padding: 1rem;
+            border-bottom: 1px solid var(--lightgray);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .conversation-item:hover {
+            background: var(--cream);
+        }
+
+        .conversation-item.active {
+            background: var(--cream);
+            border-left: 4px solid var(--plum);
+        }
+
+        .conversation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .customer-name {
+            font-weight: 600;
+        }
+
+        .message-time {
+            font-size: 0.8rem;
+            color: var(--charcoal);
+        }
+
+        .last-message {
+            font-size: 0.9rem;
+            color: var(--charcoal);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .unread-badge {
+            background: var(--plum);
+            color: var(--white);
+            padding: 0.2rem 0.5rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+        }
+
+        .chat-container {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .chat-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--lightgray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .customer-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .customer-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--plum);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .customer-details h3 {
+            margin: 0;
+            margin-bottom: 0.2rem;
+        }
+
+        .customer-details p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--charcoal);
+        }
+
+        .chat-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            max-width: 70%;
+            padding: 1rem;
+            border-radius: var(--radius);
+            position: relative;
+        }
+
+        .message.received {
+            background: var(--cream);
+            align-self: flex-start;
+        }
+
+        .message.sent {
+            background: var(--plum);
+            color: var(--white);
+            align-self: flex-end;
+        }
+
+        .message-meta {
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .chat-input {
+            padding: 1rem;
+            border-top: 1px solid var(--lightgray);
+        }
+
+        .input-container {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .message-input {
+            flex-grow: 1;
+            padding: 1rem;
+            border: 1px solid var(--lightgray);
+            border-radius: var(--radius);
+            resize: none;
+            min-height: 60px;
+        }
+
+        .quick-replies {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .quick-reply {
+            padding: 0.5rem 1rem;
+            background: var(--cream);
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .quick-reply:hover {
+            background: var(--lightgray);
+        }
+
+        .order-preview {
+            background: var(--cream);
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .order-items {
+            font-size: 0.9rem;
+            color: var(--charcoal);
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="seller-portal.html" class="logo">Seller Portal</a>
+        <nav>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="seller-portal.html" class="nav-link">
+                        📊 <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-products.html" class="nav-link">
+                        📦 <span>Products</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-orders.html" class="nav-link">
+                        🛍️ <span>Orders</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-earnings.html" class="nav-link">
+                        💰 <span>Earnings</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-analytics.html" class="nav-link">
+                        📈 <span>Analytics</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-marketing.html" class="nav-link">
+                        🎯 <span>Marketing</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-messages.html" class="nav-link active">
+                        💬 <span>Messages</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-settings.html" class="nav-link">
+                        ⚙️ <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="header">
+            <h1>Messages</h1>
+            <div class="user-menu">
+                <div class="notifications">
+                    <span class="notification-badge">2</span>
+                    🔔
+                </div>
+                <div class="user-profile">
+                    Seller Store
+                </div>
+            </div>
+        </header>
+
+        <div class="messages-container">
+            <div class="conversations-list">
+                <div class="conversations-header">
+                    <input type="text" class="search-bar" placeholder="Search conversations..." id="searchConversations">
+                    <div class="filter-options">
+                        <button class="filter-button active" data-filter="all">All</button>
+                        <button class="filter-button" data-filter="unread">Unread</button>
+                        <button class="filter-button" data-filter="orders">Orders</button>
+                    </div>
+                </div>
+                <div class="conversations" id="conversationsList">
+                    <!-- Conversations will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div class="customer-info">
+                        <div class="customer-avatar">JD</div>
+                        <div class="customer-details">
+                            <h3>John Doe</h3>
+                            <p>Order #1234</p>
+                        </div>
+                    </div>
+                    <div class="chat-actions">
+                        <button class="action-button" onclick="messagesManager.viewOrder('1234')">View Order</button>
+                        <button class="action-button secondary" onclick="messagesManager.markResolved()">Mark Resolved</button>
+                    </div>
+                </div>
+
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Messages will be populated by JavaScript -->
+                </div>
+
+                <div class="chat-input">
+                    <div class="quick-replies">
+                        <div class="quick-reply" onclick="messagesManager.useQuickReply('Thank you for your order!')">👋 Thank you</div>
+                        <div class="quick-reply" onclick="messagesManager.useQuickReply('Your order has been shipped!')">📦 Order shipped</div>
+                        <div class="quick-reply" onclick="messagesManager.useQuickReply('I\'ll check and get back to you soon.')">⏳ Will check</div>
+                    </div>
+                    <div class="input-container">
+                        <textarea class="message-input" placeholder="Type your message..." id="messageInput"></textarea>
+                        <button class="action-button" onclick="messagesManager.sendMessage()">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        class MessagesManager {
+            constructor() {
+                this.conversations = [
+                    {
+                        id: 1,
+                        customer: {
+                            name: 'John Doe',
+                            avatar: 'JD',
+                            orderId: '1234'
+                        },
+                        lastMessage: 'When will my order arrive?',
+                        time: '10:30 AM',
+                        unread: true
+                    },
+                    {
+                        id: 2,
+                        customer: {
+                            name: 'Jane Smith',
+                            avatar: 'JS',
+                            orderId: '1235'
+                        },
+                        lastMessage: 'Thank you for the quick delivery!',
+                        time: 'Yesterday',
+                        unread: false
+                    }
+                ];
+
+                this.messages = [
+                    {
+                        id: 1,
+                        type: 'received',
+                        content: 'Hi, I just placed order #1234. When will it be shipped?',
+                        time: '10:30 AM'
+                    },
+                    {
+                        id: 2,
+                        type: 'sent',
+                        content: 'Hello! Thank you for your order. We\'ll process it within 24 hours and send you the tracking number.',
+                        time: '10:32 AM'
+                    },
+                    {
+                        id: 3,
+                        type: 'received',
+                        content: 'Great, thank you! Looking forward to receiving it.',
+                        time: '10:33 AM'
+                    }
+                ];
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.refreshConversations();
+                this.refreshMessages();
+            }
+
+            setupEventListeners() {
+                document.getElementById('searchConversations').addEventListener('input', (e) => {
+                    this.filterConversations(e.target.value);
+                });
+
+                document.querySelectorAll('.filter-button').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
+                        e.target.classList.add('active');
+                        this.filterConversations('', e.target.dataset.filter);
+                    });
+                });
+
+                document.getElementById('messageInput').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.sendMessage();
+                    }
+                });
+            }
+
+            filterConversations(search = '', filter = 'all') {
+                const filtered = this.conversations.filter(conv => {
+                    const matchesSearch = conv.customer.name.toLowerCase().includes(search.toLowerCase()) ||
+                                        conv.customer.orderId.includes(search);
+                    const matchesFilter = filter === 'all' ||
+                                        (filter === 'unread' && conv.unread) ||
+                                        (filter === 'orders' && conv.customer.orderId);
+                    return matchesSearch && matchesFilter;
+                });
+
+                this.refreshConversations(filtered);
+            }
+
+            refreshConversations(conversations = this.conversations) {
+                const container = document.getElementById('conversationsList');
+                container.innerHTML = conversations.map(conv => `
+                    <div class="conversation-item ${conv.unread ? 'active' : ''}" onclick="messagesManager.selectConversation(${conv.id})">
+                        <div class="conversation-header">
+                            <span class="customer-name">${conv.customer.name}</span>
+                            <span class="message-time">${conv.time}</span>
+                        </div>
+                        <div class="last-message">
+                            ${conv.lastMessage}
+                        </div>
+                        ${conv.unread ? '<span class="unread-badge">New</span>' : ''}
+                    </div>
+                `).join('');
+            }
+
+            refreshMessages() {
+                const container = document.getElementById('chatMessages');
+                container.innerHTML = this.messages.map(message => `
+                    <div class="message ${message.type}">
+                        <div class="message-content">${message.content}</div>
+                        <div class="message-meta">${message.time}</div>
+                    </div>
+                `).join('');
+                container.scrollTop = container.scrollHeight;
+            }
+
+            selectConversation(id) {
+                const conversation = this.conversations.find(c => c.id === id);
+                if (!conversation) return;
+
+                conversation.unread = false;
+                this.refreshConversations();
+                // In a real application, we would load the messages for this conversation
+            }
+
+            sendMessage() {
+                const input = document.getElementById('messageInput');
+                const message = input.value.trim();
+                if (!message) return;
+
+                this.messages.push({
+                    id: this.messages.length + 1,
+                    type: 'sent',
+                    content: message,
+                    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                });
+
+                input.value = '';
+                this.refreshMessages();
+            }
+
+            useQuickReply(message) {
+                document.getElementById('messageInput').value = message;
+            }
+
+            viewOrder(orderId) {
+                // Demo implementation
+                alert(`Viewing order ${orderId}`);
+            }
+
+            markResolved() {
+                // Demo implementation
+                alert('Conversation marked as resolved');
+            }
+        }
+
+        // Initialize MessagesManager
+        const messagesManager = new MessagesManager();
+        messagesManager.init();
+    </script>
+</body>
+</html> 

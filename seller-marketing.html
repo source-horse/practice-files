@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>MiniMart - Seller Marketing</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap" rel="stylesheet">
+    <style>
+        /* Import base styles from seller-portal.html */
+        @import url('seller-portal.css');
+
+        .marketing-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .summary-title {
+            font-size: 0.9rem;
+            color: var(--charcoal);
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--plum);
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-trend {
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .campaign-section {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .campaign-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .campaign-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .filter-input {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--lightgray);
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+        }
+
+        .campaign-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .campaign-card {
+            background: var(--cream);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--lightgray);
+        }
+
+        .campaign-status {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .campaign-status.active {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .campaign-status.scheduled {
+            background: var(--warning);
+            color: var(--white);
+        }
+
+        .campaign-status.ended {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        .campaign-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .metric-item {
+            text-align: center;
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: var(--charcoal);
+        }
+
+        .metric-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--plum);
+        }
+
+        .promotion-section {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .promotion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .coupon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .coupon-card {
+            border: 2px dashed var(--plum);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            text-align: center;
+            position: relative;
+        }
+
+        .coupon-type {
+            position: absolute;
+            top: -0.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--white);
+            padding: 0 0.5rem;
+            font-size: 0.8rem;
+            color: var(--plum);
+        }
+
+        .coupon-code {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--plum);
+            margin: 1rem 0;
+            letter-spacing: 2px;
+        }
+
+        .coupon-details {
+            font-size: 0.9rem;
+            color: var(--charcoal);
+            margin-bottom: 1rem;
+        }
+
+        .coupon-usage {
+            font-size: 0.8rem;
+            color: var(--charcoal);
+        }
+
+        .social-section {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .social-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .social-card {
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            text-align: center;
+            background: var(--cream);
+        }
+
+        .social-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .social-platform {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .social-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .social-stat {
+            font-size: 0.8rem;
+        }
+
+        .social-stat-value {
+            font-weight: 600;
+            color: var(--plum);
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="seller-portal.html" class="logo">Seller Portal</a>
+        <nav>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="seller-portal.html" class="nav-link">
+                        📊 <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-products.html" class="nav-link">
+                        📦 <span>Products</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-orders.html" class="nav-link">
+                        🛍️ <span>Orders</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-earnings.html" class="nav-link">
+                        💰 <span>Earnings</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-analytics.html" class="nav-link">
+                        📈 <span>Analytics</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-marketing.html" class="nav-link active">
+                        🎯 <span>Marketing</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-messages.html" class="nav-link">
+                        💬 <span>Messages</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-settings.html" class="nav-link">
+                        ⚙️ <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="header">
+            <h1>Marketing</h1>
+            <div class="user-menu">
+                <div class="notifications">
+                    <span class="notification-badge">2</span>
+                    🔔
+                </div>
+                <div class="user-profile">
+                    Seller Store
+                </div>
+            </div>
+        </header>
+
+        <div class="marketing-summary">
+            <div class="summary-card">
+                <div class="summary-title">Active Campaigns</div>
+                <div class="summary-value">3</div>
+                <div class="summary-trend trend-up">↑ 1 new this week</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-title">Total Reach</div>
+                <div class="summary-value">12.5K</div>
+                <div class="summary-trend trend-up">↑ 15% vs last week</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-title">Conversion Rate</div>
+                <div class="summary-value">4.8%</div>
+                <div class="summary-trend trend-up">↑ 0.5% vs last week</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-title">Active Coupons</div>
+                <div class="summary-value">5</div>
+                <div class="summary-trend">2 ending soon</div>
+            </div>
+        </div>
+
+        <div class="campaign-section">
+            <div class="campaign-header">
+                <h2>Marketing Campaigns</h2>
+                <button class="action-button" onclick="marketingManager.createCampaign()">
+                    ➕ Create Campaign
+                </button>
+            </div>
+
+            <div class="campaign-filters">
+                <input type="text" class="filter-input" placeholder="Search campaigns..." id="searchCampaigns">
+                <select class="filter-input" id="campaignStatus">
+                    <option value="">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="scheduled">Scheduled</option>
+                    <option value="ended">Ended</option>
+                </select>
+                <select class="filter-input" id="campaignType">
+                    <option value="">All Types</option>
+                    <option value="discount">Discount</option>
+                    <option value="flash">Flash Sale</option>
+                    <option value="seasonal">Seasonal</option>
+                </select>
+            </div>
+
+            <div class="campaign-grid" id="campaignGrid">
+                <!-- Campaigns will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <div class="promotion-section">
+            <div class="promotion-header">
+                <h2>Promotional Coupons</h2>
+                <button class="action-button" onclick="marketingManager.createCoupon()">
+                    ➕ Create Coupon
+                </button>
+            </div>
+
+            <div class="coupon-grid" id="couponGrid">
+                <!-- Coupons will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <div class="social-section">
+            <div class="social-header">
+                <h2>Social Media Performance</h2>
+                <button class="action-button" onclick="marketingManager.connectSocial()">
+                    ➕ Connect Platform
+                </button>
+            </div>
+
+            <div class="social-grid" id="socialGrid">
+                <!-- Social media cards will be populated by JavaScript -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        class MarketingManager {
+            constructor() {
+                this.campaigns = [
+                    {
+                        id: 1,
+                        name: 'Summer Sale',
+                        type: 'seasonal',
+                        status: 'active',
+                        startDate: '2024-03-01',
+                        endDate: '2024-03-31',
+                        budget: 1000,
+                        spent: 450,
+                        reach: 5000,
+                        conversions: 120
+                    },
+                    {
+                        id: 2,
+                        name: 'Flash Deal - Electronics',
+                        type: 'flash',
+                        status: 'scheduled',
+                        startDate: '2024-03-20',
+                        endDate: '2024-03-21',
+                        budget: 500,
+                        spent: 0,
+                        reach: 0,
+                        conversions: 0
+                    }
+                ];
+
+                this.coupons = [
+                    {
+                        code: 'SUMMER20',
+                        type: 'Percentage',
+                        value: '20% OFF',
+                        minPurchase: 100,
+                        validUntil: '2024-03-31',
+                        usageLimit: 100,
+                        used: 45
+                    },
+                    {
+                        code: 'FREESHIP',
+                        type: 'Free Shipping',
+                        value: 'Free Shipping',
+                        minPurchase: 50,
+                        validUntil: '2024-03-31',
+                        usageLimit: 200,
+                        used: 89
+                    }
+                ];
+
+                this.socialPlatforms = [
+                    {
+                        name: 'Instagram',
+                        icon: '📸',
+                        followers: '5.2K',
+                        engagement: '3.8%',
+                        posts: 128,
+                        reach: '15K'
+                    },
+                    {
+                        name: 'Facebook',
+                        icon: '👥',
+                        followers: '3.8K',
+                        engagement: '2.5%',
+                        posts: 95,
+                        reach: '12K'
+                    },
+                    {
+                        name: 'Twitter',
+                        icon: '🐦',
+                        followers: '2.1K',
+                        engagement: '1.9%',
+                        posts: 256,
+                        reach: '8K'
+                    }
+                ];
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.refreshCampaigns();
+                this.refreshCoupons();
+                this.refreshSocialPlatforms();
+            }
+
+            setupEventListeners() {
+                document.getElementById('searchCampaigns').addEventListener('input', () => this.filterCampaigns());
+                document.getElementById('campaignStatus').addEventListener('change', () => this.filterCampaigns());
+                document.getElementById('campaignType').addEventListener('change', () => this.filterCampaigns());
+            }
+
+            filterCampaigns() {
+                const searchTerm = document.getElementById('searchCampaigns').value.toLowerCase();
+                const status = document.getElementById('campaignStatus').value;
+                const type = document.getElementById('campaignType').value;
+
+                const filtered = this.campaigns.filter(campaign => {
+                    const matchesSearch = campaign.name.toLowerCase().includes(searchTerm);
+                    const matchesStatus = !status || campaign.status === status;
+                    const matchesType = !type || campaign.type === type;
+                    return matchesSearch && matchesStatus && matchesType;
+                });
+
+                this.refreshCampaigns(filtered);
+            }
+
+            refreshCampaigns(campaigns = this.campaigns) {
+                const grid = document.getElementById('campaignGrid');
+                grid.innerHTML = campaigns.map(campaign => `
+                    <div class="campaign-card">
+                        <span class="campaign-status ${campaign.status}">${campaign.status}</span>
+                        <h3>${campaign.name}</h3>
+                        <p>${campaign.type} campaign</p>
+                        <div class="campaign-metrics">
+                            <div class="metric-item">
+                                <div class="metric-label">Budget</div>
+                                <div class="metric-value">$${campaign.budget}</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-label">Spent</div>
+                                <div class="metric-value">$${campaign.spent}</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-label">Reach</div>
+                                <div class="metric-value">${campaign.reach}</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-label">Conversions</div>
+                                <div class="metric-value">${campaign.conversions}</div>
+                            </div>
+                        </div>
+                        <div class="campaign-dates">
+                            <small>${campaign.startDate} - ${campaign.endDate}</small>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            refreshCoupons() {
+                const grid = document.getElementById('couponGrid');
+                grid.innerHTML = this.coupons.map(coupon => `
+                    <div class="coupon-card">
+                        <div class="coupon-type">${coupon.type}</div>
+                        <div class="coupon-code">${coupon.code}</div>
+                        <div class="coupon-details">
+                            <p>${coupon.value}</p>
+                            <p>Min. Purchase: $${coupon.minPurchase}</p>
+                            <p>Valid until: ${coupon.validUntil}</p>
+                        </div>
+                        <div class="coupon-usage">
+                            Used: ${coupon.used}/${coupon.usageLimit}
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            refreshSocialPlatforms() {
+                const grid = document.getElementById('socialGrid');
+                grid.innerHTML = this.socialPlatforms.map(platform => `
+                    <div class="social-card">
+                        <div class="social-icon">${platform.icon}</div>
+                        <div class="social-platform">${platform.name}</div>
+                        <div class="social-stats">
+                            <div class="social-stat">
+                                <div>Followers</div>
+                                <div class="social-stat-value">${platform.followers}</div>
+                            </div>
+                            <div class="social-stat">
+                                <div>Engagement</div>
+                                <div class="social-stat-value">${platform.engagement}</div>
+                            </div>
+                            <div class="social-stat">
+                                <div>Posts</div>
+                                <div class="social-stat-value">${platform.posts}</div>
+                            </div>
+                            <div class="social-stat">
+                                <div>Reach</div>
+                                <div class="social-stat-value">${platform.reach}</div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            createCampaign() {
+                // Demo implementation
+                alert('Create Campaign feature will be implemented here');
+            }
+
+            createCoupon() {
+                // Demo implementation
+                alert('Create Coupon feature will be implemented here');
+            }
+
+            connectSocial() {
+                // Demo implementation
+                alert('Connect Social Media Platform feature will be implemented here');
+            }
+        }
+
+        // Initialize MarketingManager
+        const marketingManager = new MarketingManager();
+        marketingManager.init();
+    </script>
+</body>
+</html> 

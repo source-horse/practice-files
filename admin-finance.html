@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>MiniMart - Admin Finance</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap" rel="stylesheet">
+    <style>
+        /* Import admin portal styles */
+        @import url('admin-portal.css');
+
+        .finance-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .finance-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-input {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--lightgray);
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+        }
+
+        .revenue-chart {
+            height: 300px;
+            margin-bottom: 2rem;
+            background: var(--lightgray);
+            border-radius: var(--radius);
+        }
+
+        .transaction-amount {
+            font-weight: 600;
+        }
+
+        .amount-positive {
+            color: var(--success);
+        }
+
+        .amount-negative {
+            color: var(--danger);
+        }
+
+        .bulk-actions {
+            background: var(--white);
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .summary-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--plum);
+        }
+
+        .summary-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--lightgray);
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="admin-portal.html" class="logo">MiniMart Admin</a>
+        <nav>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="admin-portal.html" class="nav-link">
+                        📊 <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-users.html" class="nav-link">
+                        👥 <span>Users</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-products.html" class="nav-link">
+                        📦 <span>Products</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-orders.html" class="nav-link">
+                        🛍️ <span>Orders</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-finance.html" class="nav-link active">
+                        💰 <span>Finance</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-marketing.html" class="nav-link">
+                        📢 <span>Marketing</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-content.html" class="nav-link">
+                        📝 <span>Content</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-support.html" class="nav-link">
+                        🎯 <span>Support</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-settings.html" class="nav-link">
+                        ⚙️ <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="header">
+            <h1>Finance Management</h1>
+            <div class="user-menu">
+                <div class="notifications">
+                    <span class="notification-badge">3</span>
+                    🔔
+                </div>
+                <div class="user-profile">
+                    Admin User
+                </div>
+            </div>
+        </header>
+
+        <div class="finance-stats">
+            <div class="stat-card">
+                <div class="stat-title">Total Revenue</div>
+                <div class="stat-value">$52,489</div>
+                <div class="trend-up">↑ 15% vs last month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Net Profit</div>
+                <div class="stat-value">$12,845</div>
+                <div class="trend-up">↑ 8% vs last month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Expenses</div>
+                <div class="stat-value">$8,456</div>
+                <div class="trend-down">↓ 3% vs last month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Pending Payouts</div>
+                <div class="stat-value">$4,234</div>
+                <div class="trend-up">↑ 12% vs last month</div>
+            </div>
+        </div>
+
+        <div class="bulk-actions">
+            <button class="action-button">
+                📥 Export Report
+            </button>
+            <button class="action-button secondary">
+                🖨️ Print Statement
+            </button>
+            <button class="action-button secondary">
+                📊 Download CSV
+            </button>
+        </div>
+
+        <div class="finance-filters">
+            <input type="text" class="filter-input" placeholder="Search transactions...">
+            <select class="filter-input">
+                <option value="">All Types</option>
+                <option value="revenue">Revenue</option>
+                <option value="expense">Expense</option>
+                <option value="payout">Payout</option>
+                <option value="refund">Refund</option>
+            </select>
+            <input type="date" class="filter-input">
+            <select class="filter-input">
+                <option value="date">Sort by Date</option>
+                <option value="amount">Sort by Amount</option>
+                <option value="type">Sort by Type</option>
+            </select>
+        </div>
+
+        <div class="summary-grid">
+            <div class="summary-card">
+                <div class="summary-title">Revenue Breakdown</div>
+                <ul class="summary-list">
+                    <li class="summary-item">
+                        <span>Product Sales</span>
+                        <span class="amount-positive">$42,567</span>
+                    </li>
+                    <li class="summary-item">
+                        <span>Shipping Fees</span>
+                        <span class="amount-positive">$5,234</span>
+                    </li>
+                    <li class="summary-item">
+                        <span>Tax Collected</span>
+                        <span class="amount-positive">$4,688</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="summary-card">
+                <div class="summary-title">Expense Breakdown</div>
+                <ul class="summary-list">
+                    <li class="summary-item">
+                        <span>Operating Costs</span>
+                        <span class="amount-negative">$3,456</span>
+                    </li>
+                    <li class="summary-item">
+                        <span>Marketing</span>
+                        <span class="amount-negative">$2,345</span>
+                    </li>
+                    <li class="summary-item">
+                        <span>Refunds</span>
+                        <span class="amount-negative">$2,655</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h2>Recent Transactions</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Transaction ID</th>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#TR12345</td>
+                        <td>2024-03-15</td>
+                        <td>Order Payment #12345</td>
+                        <td>Revenue</td>
+                        <td><span class="transaction-amount amount-positive">+$399.97</span></td>
+                        <td><span class="status-badge completed">Completed</span></td>
+                        <td><button class="action-button">View</button></td>
+                    </tr>
+                    <tr>
+                        <td>#TR12346</td>
+                        <td>2024-03-15</td>
+                        <td>Marketing Campaign</td>
+                        <td>Expense</td>
+                        <td><span class="transaction-amount amount-negative">-$500.00</span></td>
+                        <td><span class="status-badge completed">Completed</span></td>
+                        <td><button class="action-button">View</button></td>
+                    </tr>
+                    <tr>
+                        <td>#TR12347</td>
+                        <td>2024-03-14</td>
+                        <td>Refund Order #12340</td>
+                        <td>Refund</td>
+                        <td><span class="transaction-amount amount-negative">-$199.99</span></td>
+                        <td><span class="status-badge pending">Processing</span></td>
+                        <td><button class="action-button">View</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        // Navigation active state
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html> 

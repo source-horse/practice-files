@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>MiniMart - Seller Products</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap" rel="stylesheet">
+    <style>
+        /* Import base styles from seller-portal.html */
+        @import url('seller-portal.css');
+
+        .product-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-input {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--lightgray);
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .bulk-actions {
+            background: var(--white);
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .category-tag {
+            background: var(--sage);
+            color: var(--white);
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+        }
+
+        .product-stats {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--charcoal);
+        }
+
+        .image-preview {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: var(--radius);
+            margin-right: 1rem;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .page-button {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--lightgray);
+            border-radius: var(--radius);
+            background: var(--white);
+            cursor: pointer;
+        }
+
+        .page-button.active {
+            background: var(--plum);
+            color: var(--white);
+            border-color: var(--plum);
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="seller-portal.html" class="logo">Seller Portal</a>
+        <nav>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="seller-portal.html" class="nav-link">
+                        📊 <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-products.html" class="nav-link active">
+                        📦 <span>Products</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-orders.html" class="nav-link">
+                        🛍️ <span>Orders</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-earnings.html" class="nav-link">
+                        💰 <span>Earnings</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-analytics.html" class="nav-link">
+                        📈 <span>Analytics</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-marketing.html" class="nav-link">
+                        🎯 <span>Marketing</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-messages.html" class="nav-link">
+                        💬 <span>Messages</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-settings.html" class="nav-link">
+                        ⚙️ <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="header">
+            <h1>Products Management</h1>
+            <div class="user-menu">
+                <div class="notifications">
+                    <span class="notification-badge">2</span>
+                    🔔
+                </div>
+                <div class="user-profile">
+                    Seller Store
+                </div>
+            </div>
+        </header>
+
+        <div class="bulk-actions">
+            <button class="action-button" onclick="showAddProductModal()">
+                ➕ Add Product
+            </button>
+            <button class="action-button secondary" onclick="handleImport()">
+                📥 Import Products
+            </button>
+            <button class="action-button secondary" onclick="exportProducts()">
+                📤 Export Products
+            </button>
+            <button class="action-button secondary" onclick="handleBulkDelete()">
+                🗑️ Bulk Delete
+            </button>
+        </div>
+
+        <div class="product-filters">
+            <input type="text" class="filter-input" placeholder="Search products..." id="searchInput">
+            <select class="filter-input" id="categoryFilter">
+                <option value="">All Categories</option>
+                <option value="electronics">Electronics</option>
+                <option value="fashion">Fashion</option>
+                <option value="home">Home</option>
+                <option value="beauty">Beauty</option>
+                <option value="toys">Toys</option>
+            </select>
+            <select class="filter-input" id="stockFilter">
+                <option value="">All Stock Status</option>
+                <option value="in-stock">In Stock</option>
+                <option value="low-stock">Low Stock</option>
+                <option value="out-of-stock">Out of Stock</option>
+            </select>
+            <select class="filter-input" id="sortBy">
+                <option value="name">Sort by Name</option>
+                <option value="price">Sort by Price</option>
+                <option value="stock">Sort by Stock</option>
+                <option value="sales">Sort by Sales</option>
+            </select>
+        </div>
+
+        <div class="product-list">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="selectAll"></th>
+                        <th>Image</th>
+                        <th>Product</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Sales</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="productTableBody">
+                    <!-- Product rows will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination" id="pagination">
+            <!-- Pagination will be populated by JavaScript -->
+        </div>
+    </main>
+
+    <script src="seller-portal.js"></script>
+    <script>
+        // Additional product management functionality
+        class ProductPage extends ProductManager {
+            constructor() {
+                super();
+                this.currentPage = 1;
+                this.itemsPerPage = 10;
+                this.selectedProducts = new Set();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.refreshProductTable();
+                this.updatePagination();
+            }
+
+            setupEventListeners() {
+                document.getElementById('searchInput').addEventListener('input', () => this.applyFilters());
+                document.getElementById('categoryFilter').addEventListener('change', () => this.applyFilters());
+                document.getElementById('stockFilter').addEventListener('change', () => this.applyFilters());
+                document.getElementById('sortBy').addEventListener('change', () => this.applyFilters());
+                document.getElementById('selectAll').addEventListener('change', (e) => this.toggleSelectAll(e.target.checked));
+            }
+
+            applyFilters() {
+                const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                const category = document.getElementById('categoryFilter').value;
+                const stockStatus = document.getElementById('stockFilter').value;
+                const sortBy = document.getElementById('sortBy').value;
+
+                let filtered = this.products.filter(product => {
+                    const matchesSearch = product.name.toLowerCase().includes(searchTerm);
+                    const matchesCategory = !category || product.category === category;
+                    const matchesStock = !stockStatus || product.status === stockStatus;
+                    return matchesSearch && matchesCategory && matchesStock;
+                });
+
+                filtered.sort((a, b) => {
+                    switch(sortBy) {
+                        case 'price': return a.price - b.price;
+                        case 'stock': return a.stock - b.stock;
+                        case 'sales': return b.sales - a.sales;
+                        default: return a.name.localeCompare(b.name);
+                    }
+                });
+
+                this.currentPage = 1;
+                this.displayProducts(filtered);
+                this.updatePagination();
+            }
+
+            displayProducts(products) {
+                const start = (this.currentPage - 1) * this.itemsPerPage;
+                const end = start + this.itemsPerPage;
+                const pageProducts = products.slice(start, end);
+
+                const tbody = document.getElementById('productTableBody');
+                tbody.innerHTML = pageProducts.map(product => `
+                    <tr>
+                        <td><input type="checkbox" class="product-select" value="${product.id}"></td>
+                        <td><img src="${product.image}" alt="${product.name}" class="image-preview"></td>
+                        <td>${product.name}</td>
+                        <td><span class="category-tag">${product.category || 'Uncategorized'}</span></td>
+                        <td>${formatCurrency(product.price)}</td>
+                        <td>${product.stock}</td>
+                        <td>${product.sales}</td>
+                        <td><span class="status-badge ${product.status}">${product.status.replace('-', ' ')}</span></td>
+                        <td>
+                            <button class="action-button" onclick="editProduct(${product.id})">Edit</button>
+                            <button class="action-button secondary" onclick="deleteProduct(${product.id})">Delete</button>
+                        </td>
+                    </tr>
+                `).join('');
+
+                this.setupCheckboxListeners();
+            }
+
+            updatePagination() {
+                const totalPages = Math.ceil(this.products.length / this.itemsPerPage);
+                const pagination = document.getElementById('pagination');
+                
+                let html = '';
+                if (this.currentPage > 1) {
+                    html += `<button class="page-button" onclick="productPage.goToPage(${this.currentPage - 1})">Previous</button>`;
+                }
+                
+                for (let i = 1; i <= totalPages; i++) {
+                    html += `<button class="page-button ${i === this.currentPage ? 'active' : ''}" 
+                            onclick="productPage.goToPage(${i})">${i}</button>`;
+                }
+                
+                if (this.currentPage < totalPages) {
+                    html += `<button class="page-button" onclick="productPage.goToPage(${this.currentPage + 1})">Next</button>`;
+                }
+                
+                pagination.innerHTML = html;
+            }
+
+            goToPage(page) {
+                this.currentPage = page;
+                this.refreshProductTable();
+                this.updatePagination();
+            }
+
+            toggleSelectAll(checked) {
+                const checkboxes = document.querySelectorAll('.product-select');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = checked;
+                    this.toggleProductSelection(parseInt(checkbox.value), checked);
+                });
+            }
+
+            toggleProductSelection(productId, selected) {
+                if (selected) {
+                    this.selectedProducts.add(productId);
+                } else {
+                    this.selectedProducts.delete(productId);
+                }
+            }
+
+            setupCheckboxListeners() {
+                document.querySelectorAll('.product-select').forEach(checkbox => {
+                    checkbox.addEventListener('change', (e) => {
+                        this.toggleProductSelection(parseInt(e.target.value), e.target.checked);
+                    });
+                });
+            }
+
+            deleteProduct(id) {
+                if (confirm('Are you sure you want to delete this product?')) {
+                    this.products = this.products.filter(p => p.id !== id);
+                    this.refreshProductTable();
+                    this.updatePagination();
+                }
+            }
+
+            handleBulkDelete() {
+                if (this.selectedProducts.size === 0) {
+                    alert('Please select products to delete');
+                    return;
+                }
+
+                if (confirm(`Are you sure you want to delete ${this.selectedProducts.size} products?`)) {
+                    this.products = this.products.filter(p => !this.selectedProducts.has(p.id));
+                    this.selectedProducts.clear();
+                    this.refreshProductTable();
+                    this.updatePagination();
+                }
+            }
+
+            exportProducts() {
+                const csv = [
+                    ['Name', 'Price', 'Stock', 'Category', 'Sales', 'Status', 'Image'].join(','),
+                    ...this.products.map(p => [
+                        p.name,
+                        p.price,
+                        p.stock,
+                        p.category || 'Uncategorized',
+                        p.sales,
+                        p.status,
+                        p.image
+                    ].join(','))
+                ].join('\n');
+
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'products.csv';
+                a.click();
+                window.URL.revokeObjectURL(url);
+            }
+        }
+
+        // Initialize the product page
+        const productPage = new ProductPage();
+        productPage.init();
+
+        // Global functions
+        function deleteProduct(id) {
+            productPage.deleteProduct(id);
+        }
+
+        function handleBulkDelete() {
+            productPage.handleBulkDelete();
+        }
+
+        function exportProducts() {
+            productPage.exportProducts();
+        }
+    </script>
+</body>
+</html> 

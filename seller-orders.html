@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>MiniMart - Seller Orders</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap" rel="stylesheet">
+    <style>
+        /* Import base styles from seller-portal.html */
+        @import url('seller-portal.css');
+
+        .order-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-input {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--lightgray);
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+        }
+
+        .order-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .summary-title {
+            font-size: 0.9rem;
+            color: var(--charcoal);
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--plum);
+        }
+
+        .order-details {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .order-details.active {
+            display: block;
+        }
+
+        .customer-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-group {
+            margin-bottom: 1rem;
+        }
+
+        .info-label {
+            font-size: 0.9rem;
+            color: var(--charcoal);
+            margin-bottom: 0.3rem;
+        }
+
+        .info-value {
+            font-weight: 600;
+        }
+
+        .order-items {
+            margin-top: 1rem;
+            border-top: 1px solid var(--lightgray);
+            padding-top: 1rem;
+        }
+
+        .item-row {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--lightgray);
+        }
+
+        .item-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: var(--radius);
+            margin-right: 1rem;
+        }
+
+        .item-details {
+            flex-grow: 1;
+        }
+
+        .item-price {
+            font-weight: 600;
+            color: var(--plum);
+        }
+
+        .timeline {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--cream);
+            border-radius: var(--radius);
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 30px;
+            bottom: -10px;
+            width: 2px;
+            background: var(--lightgray);
+        }
+
+        .timeline-item:last-child::before {
+            display: none;
+        }
+
+        .timeline-icon {
+            width: 30px;
+            height: 30px;
+            background: var(--plum);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            margin-right: 1rem;
+        }
+
+        .timeline-content {
+            flex-grow: 1;
+        }
+
+        .timeline-date {
+            font-size: 0.8rem;
+            color: var(--charcoal);
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="seller-portal.html" class="logo">Seller Portal</a>
+        <nav>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="seller-portal.html" class="nav-link">
+                        📊 <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-products.html" class="nav-link">
+                        📦 <span>Products</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-orders.html" class="nav-link active">
+                        🛍️ <span>Orders</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-earnings.html" class="nav-link">
+                        💰 <span>Earnings</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-analytics.html" class="nav-link">
+                        📈 <span>Analytics</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-marketing.html" class="nav-link">
+                        🎯 <span>Marketing</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-messages.html" class="nav-link">
+                        💬 <span>Messages</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-settings.html" class="nav-link">
+                        ⚙️ <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="header">
+            <h1>Orders Management</h1>
+            <div class="user-menu">
+                <div class="notifications">
+                    <span class="notification-badge">2</span>
+                    🔔
+                </div>
+                <div class="user-profile">
+                    Seller Store
+                </div>
+            </div>
+        </header>
+
+        <div class="order-summary">
+            <div class="summary-card">
+                <div class="summary-title">Total Orders</div>
+                <div class="summary-value">128</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-title">Pending</div>
+                <div class="summary-value">12</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-title">Processing</div>
+                <div class="summary-value">24</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-title">Completed</div>
+                <div class="summary-value">92</div>
+            </div>
+        </div>
+
+        <div class="order-filters">
+            <input type="text" class="filter-input" placeholder="Search orders..." id="searchInput">
+            <select class="filter-input" id="statusFilter">
+                <option value="">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="processing">Processing</option>
+                <option value="shipped">Shipped</option>
+                <option value="delivered">Delivered</option>
+                <option value="cancelled">Cancelled</option>
+            </select>
+            <select class="filter-input" id="timeFilter">
+                <option value="today">Today</option>
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+                <option value="year">This Year</option>
+            </select>
+            <button class="action-button" onclick="exportOrders()">
+                📤 Export Orders
+            </button>
+        </div>
+
+        <div class="order-list">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Date</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="orderTableBody">
+                    <!-- Order rows will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <div id="orderDetails" class="order-details">
+            <!-- Order details will be populated by JavaScript -->
+        </div>
+    </main>
+
+    <script>
+        // Order Management Class
+        class OrderManager {
+            constructor() {
+                this.orders = [
+                    {
+                        id: 'ORD-001',
+                        customer: {
+                            name: 'John Doe',
+                            email: 'john@example.com',
+                            phone: '+1 234-567-8900',
+                            address: '123 Main St, City, Country'
+                        },
+                        date: '2024-03-15',
+                        total: 299.97,
+                        status: 'pending',
+                        items: [
+                            {
+                                name: 'Wireless Earbuds',
+                                price: 129.99,
+                                quantity: 1,
+                                image: 'https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb'
+                            },
+                            {
+                                name: 'Smart Coffee Maker',
+                                price: 169.98,
+                                quantity: 1,
+                                image: 'https://images.unsplash.com/photo-1517914309068-967f8779aa14'
+                            }
+                        ],
+                        timeline: [
+                            {
+                                status: 'Order Placed',
+                                date: '2024-03-15 10:30 AM',
+                                icon: '📝'
+                            },
+                            {
+                                status: 'Payment Confirmed',
+                                date: '2024-03-15 10:35 AM',
+                                icon: '💳'
+                            }
+                        ]
+                    }
+                    // Add more sample orders as needed
+                ];
+            }
+
+            init() {
+                this.refreshOrderTable();
+                this.setupEventListeners();
+            }
+
+            setupEventListeners() {
+                document.getElementById('searchInput').addEventListener('input', () => this.applyFilters());
+                document.getElementById('statusFilter').addEventListener('change', () => this.applyFilters());
+                document.getElementById('timeFilter').addEventListener('change', () => this.applyFilters());
+            }
+
+            applyFilters() {
+                const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                const status = document.getElementById('statusFilter').value;
+                const timeFrame = document.getElementById('timeFilter').value;
+
+                let filtered = this.orders.filter(order => {
+                    const matchesSearch = order.id.toLowerCase().includes(searchTerm) ||
+                                        order.customer.name.toLowerCase().includes(searchTerm);
+                    const matchesStatus = !status || order.status === status;
+                    // Add time frame filtering logic here
+                    return matchesSearch && matchesStatus;
+                });
+
+                this.refreshOrderTable(filtered);
+            }
+
+            refreshOrderTable(orders = this.orders) {
+                const tbody = document.getElementById('orderTableBody');
+                tbody.innerHTML = orders.map(order => `
+                    <tr>
+                        <td>${order.id}</td>
+                        <td>${order.customer.name}</td>
+                        <td>${order.date}</td>
+                        <td>${this.formatCurrency(order.total)}</td>
+                        <td><span class="status-badge ${order.status}">${order.status}</span></td>
+                        <td>
+                            <button class="action-button" onclick="orderManager.viewOrder('${order.id}')">View</button>
+                            <button class="action-button secondary" onclick="orderManager.updateStatus('${order.id}')">Update</button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            viewOrder(orderId) {
+                const order = this.orders.find(o => o.id === orderId);
+                if (!order) return;
+
+                const orderDetails = document.getElementById('orderDetails');
+                orderDetails.innerHTML = `
+                    <h2>Order Details - ${order.id}</h2>
+                    <div class="customer-info">
+                        <div class="info-group">
+                            <div class="info-label">Customer Name</div>
+                            <div class="info-value">${order.customer.name}</div>
+                        </div>
+                        <div class="info-group">
+                            <div class="info-label">Email</div>
+                            <div class="info-value">${order.customer.email}</div>
+                        </div>
+                        <div class="info-group">
+                            <div class="info-label">Phone</div>
+                            <div class="info-value">${order.customer.phone}</div>
+                        </div>
+                        <div class="info-group">
+                            <div class="info-label">Shipping Address</div>
+                            <div class="info-value">${order.customer.address}</div>
+                        </div>
+                    </div>
+
+                    <div class="order-items">
+                        <h3>Order Items</h3>
+                        ${order.items.map(item => `
+                            <div class="item-row">
+                                <img src="${item.image}" alt="${item.name}" class="item-image">
+                                <div class="item-details">
+                                    <div class="item-name">${item.name}</div>
+                                    <div class="item-quantity">Quantity: ${item.quantity}</div>
+                                </div>
+                                <div class="item-price">${this.formatCurrency(item.price)}</div>
+                            </div>
+                        `).join('')}
+                        <div class="order-total">
+                            <h4>Total: ${this.formatCurrency(order.total)}</h4>
+                        </div>
+                    </div>
+
+                    <div class="timeline">
+                        <h3>Order Timeline</h3>
+                        ${order.timeline.map(event => `
+                            <div class="timeline-item">
+                                <div class="timeline-icon">${event.icon}</div>
+                                <div class="timeline-content">
+                                    <div class="timeline-status">${event.status}</div>
+                                    <div class="timeline-date">${event.date}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                orderDetails.classList.add('active');
+            }
+
+            updateStatus(orderId) {
+                const order = this.orders.find(o => o.id === orderId);
+                if (!order) return;
+
+                const newStatus = prompt('Enter new status (pending/processing/shipped/delivered/cancelled):', order.status);
+                if (newStatus && ['pending', 'processing', 'shipped', 'delivered', 'cancelled'].includes(newStatus)) {
+                    order.status = newStatus;
+                    order.timeline.push({
+                        status: `Status updated to ${newStatus}`,
+                        date: new Date().toLocaleString(),
+                        icon: '🔄'
+                    });
+                    this.refreshOrderTable();
+                    if (document.getElementById('orderDetails').classList.contains('active')) {
+                        this.viewOrder(orderId);
+                    }
+                }
+            }
+
+            formatCurrency(amount) {
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD'
+                }).format(amount);
+            }
+
+            exportOrders() {
+                const csv = [
+                    ['Order ID', 'Customer', 'Date', 'Total', 'Status'].join(','),
+                    ...this.orders.map(order => [
+                        order.id,
+                        order.customer.name,
+                        order.date,
+                        order.total,
+                        order.status
+                    ].join(','))
+                ].join('\n');
+
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'orders.csv';
+                a.click();
+                window.URL.revokeObjectURL(url);
+            }
+        }
+
+        // Initialize OrderManager
+        const orderManager = new OrderManager();
+        orderManager.init();
+
+        // Global functions
+        function exportOrders() {
+            orderManager.exportOrders();
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>MiniMart - Product Detail</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --charcoal: #36454F;
+            --blush: #FEC5BB;
+            --white: #FFFFFF;
+            --plum: #4E2A5A;
+            --sage: #B2AC88;
+            --cream: #FFF8DC;
+            --midnight: #191970;
+            --terracotta: #E2725B;
+            --lightgray: #D3D3D3;
+            --success: #4CAF50;
+            --warning: #FFA500;
+            --shadow: 0 4px 16px rgba(30,30,60,0.07);
+            --radius: 16px;
+            --transition: 0.2s cubic-bezier(.4,0,.2,1);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Montserrat', Arial, sans-serif;
+            background: var(--cream);
+            color: var(--charcoal);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--midnight);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .navbar .logo {
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: var(--blush);
+            text-decoration: none;
+        }
+
+        .product-container {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .product-images {
+            position: relative;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+        }
+
+        .thumbnail-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .thumbnail {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .thumbnail:hover {
+            transform: scale(1.05);
+        }
+
+        .product-info {
+            padding: 1rem;
+        }
+
+        .product-title {
+            font-size: 2rem;
+            color: var(--plum);
+            margin: 0 0 1rem 0;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            color: var(--plum);
+            margin-bottom: 1rem;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: var(--lightgray);
+            margin-right: 1rem;
+        }
+
+        .discount-badge {
+            background: var(--terracotta);
+            color: var(--white);
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.9rem;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stars {
+            color: #FFD700;
+            font-size: 1.2rem;
+        }
+
+        .review-count {
+            color: var(--charcoal);
+            font-size: 0.9rem;
+        }
+
+        .availability {
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border-radius: var(--radius);
+            background: var(--success);
+            color: var(--white);
+            display: inline-block;
+        }
+
+        .availability.out-of-stock {
+            background: var(--terracotta);
+        }
+
+        .variants {
+            margin-bottom: 1.5rem;
+        }
+
+        .variant-group {
+            margin-bottom: 1rem;
+        }
+
+        .variant-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .variant-options {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .variant-option {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--lightgray);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .variant-option:hover {
+            border-color: var(--sage);
+        }
+
+        .variant-option.selected {
+            border-color: var(--plum);
+            background: rgba(78,42,90,0.05);
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border: none;
+            background: var(--lightgray);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .quantity-input {
+            width: 50px;
+            text-align: center;
+            border: 2px solid var(--lightgray);
+            border-radius: var(--radius);
+            padding: 0.3rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .add-to-cart, .buy-now {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .add-to-cart {
+            background: var(--plum);
+            color: var(--white);
+        }
+
+        .buy-now {
+            background: var(--terracotta);
+            color: var(--white);
+        }
+
+        .add-to-cart:hover, .buy-now:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(30,30,60,0.15);
+        }
+
+        .delivery-info {
+            background: var(--white);
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin-bottom: 1.5rem;
+        }
+
+        .delivery-info h3 {
+            margin: 0 0 0.5rem 0;
+            color: var(--plum);
+        }
+
+        .trust-badges {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--charcoal);
+            font-size: 0.9rem;
+        }
+
+        .product-tabs {
+            margin-top: 3rem;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .tab-button {
+            padding: 1rem 2rem;
+            background: var(--white);
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .tab-button.active {
+            background: var(--plum);
+            color: var(--white);
+        }
+
+        .tab-content {
+            display: none;
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--radius);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .review-summary {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .overall-rating {
+            text-align: center;
+        }
+
+        .rating-number {
+            font-size: 3rem;
+            color: var(--plum);
+            margin: 0;
+        }
+
+        .rating-distribution {
+            margin-top: 1rem;
+        }
+
+        .rating-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .bar {
+            flex: 1;
+            height: 8px;
+            background: var(--lightgray);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: var(--plum);
+        }
+
+        .review-filters {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .review-sort {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .review-card {
+            border: 1px solid var(--lightgray);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .reviewer-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--lightgray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .verified-badge {
+            background: var(--success);
+            color: var(--white);
+            padding: 0.2rem 0.5rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+        }
+
+        .review-images {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .review-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: var(--radius);
+        }
+
+        .helpful-votes {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            color: var(--charcoal);
+            font-size: 0.9rem;
+        }
+
+        .vote-button {
+            background: none;
+            border: none;
+            color: var(--plum);
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .write-review {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--radius);
+            margin-top: 2rem;
+        }
+
+        .review-form {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            color: var(--lightgray);
+        }
+
+        .star-rating .star {
+            cursor: pointer;
+        }
+
+        .star-rating .star.active {
+            color: #FFD700;
+        }
+
+        .image-upload {
+            border: 2px dashed var(--lightgray);
+            border-radius: var(--radius);
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        @media (max-width: 968px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .review-summary {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .product-container {
+                padding: 1rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .review-filters {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="Home page .HTML" class="logo">MiniMart</a>
+        <div style="display: flex; align-items: center; gap: 1.5rem;">
+            <a href="Home page .HTML" style="color: var(--white); text-decoration: none;">Continue Shopping</a>
+        </div>
+    </nav>
+
+    <div class="product-container">
+        <div class="product-grid">
+            <div class="product-images">
+                <img src="https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb" alt="Wireless Earbuds" class="main-image">
+                <div class="thumbnail-grid">
+                    <img src="https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb" alt="Thumbnail 1" class="thumbnail">
+                    <img src="https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb" alt="Thumbnail 2" class="thumbnail">
+                    <img src="https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb" alt="Thumbnail 3" class="thumbnail">
+                    <img src="https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb" alt="Thumbnail 4" class="thumbnail">
+                </div>
+            </div>
+
+            <div class="product-info">
+                <h1 class="product-title">Premium Wireless Earbuds</h1>
+                <div class="product-price">
+                    <span class="original-price">$199.99</span>
+                    <span>$129.99</span>
+                    <span class="discount-badge">35% OFF</span>
+                </div>
+
+                <div class="rating">
+                    <div class="stars">★★★★★</div>
+                    <span class="review-count">Based on 245 reviews</span>
+                </div>
+
+                <div class="availability">In Stock - Ships within 24 hours</div>
+
+                <div class="variants">
+                    <div class="variant-group">
+                        <label>Color</label>
+                        <div class="variant-options">
+                            <div class="variant-option selected">Black</div>
+                            <div class="variant-option">White</div>
+                            <div class="variant-option">Blue</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quantity-selector">
+                    <button class="quantity-btn">-</button>
+                    <input type="number" value="1" min="1" class="quantity-input">
+                    <button class="quantity-btn">+</button>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="add-to-cart">Add to Cart</button>
+                    <button class="buy-now">Buy Now</button>
+                </div>
+
+                <div class="delivery-info">
+                    <h3>Delivery Information</h3>
+                    <p>Free shipping on orders over $50</p>
+                    <p>Estimated delivery: 3-5 business days</p>
+                </div>
+
+                <div class="trust-badges">
+                    <div class="trust-badge">
+                        <span>🔒</span>
+                        <span>Secure Payment</span>
+                    </div>
+                    <div class="trust-badge">
+                        <span>✓</span>
+                        <span>30-Day Returns</span>
+                    </div>
+                    <div class="trust-badge">
+                        <span>⭐</span>
+                        <span>2-Year Warranty</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-tabs">
+            <div class="tab-buttons">
+                <button class="tab-button active" data-tab="description">Description</button>
+                <button class="tab-button" data-tab="specifications">Specifications</button>
+                <button class="tab-button" data-tab="reviews">Reviews</button>
+            </div>
+
+            <div class="tab-content active" id="description">
+                <h2>Product Description</h2>
+                <p>Experience premium sound quality with our latest wireless earbuds. Featuring active noise cancellation, crystal-clear audio, and up to 8 hours of battery life.</p>
+                <h3>Key Features:</h3>
+                <ul>
+                    <li>Active Noise Cancellation</li>
+                    <li>8-hour battery life (24 hours with charging case)</li>
+                    <li>Water and sweat resistant (IPX5)</li>
+                    <li>Bluetooth 5.0 connectivity</li>
+                    <li>Touch controls for easy operation</li>
+                </ul>
+            </div>
+
+            <div class="tab-content" id="specifications">
+                <h2>Technical Specifications</h2>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="padding: 0.5rem; border-bottom: 1px solid var(--lightgray);">Battery Life</td>
+                        <td style="padding: 0.5rem; border-bottom: 1px solid var(--lightgray);">8 hours (24 hours with case)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5rem; border-bottom: 1px solid var(--lightgray);">Charging Time</td>
+                        <td style="padding: 0.5rem; border-bottom: 1px solid var(--lightgray);">2 hours</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5rem; border-bottom: 1px solid var(--lightgray);">Bluetooth Version</td>
+                        <td style="padding: 0.5rem; border-bottom: 1px solid var(--lightgray);">5.0</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5rem; border-bottom: 1px solid var(--lightgray);">Water Resistance</td>
+                        <td style="padding: 0.5rem; border-bottom: 1px solid var(--lightgray);">IPX5</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="tab-content" id="reviews">
+                <div class="review-summary">
+                    <div class="overall-rating">
+                        <h2 class="rating-number">4.8</h2>
+                        <div class="stars">★★★★★</div>
+                        <p>Based on 245 reviews</p>
+                    </div>
+                    <div class="rating-distribution">
+                        <div class="rating-bar">
+                            <span>5 stars</span>
+                            <div class="bar">
+                                <div class="bar-fill" style="width: 75%;"></div>
+                            </div>
+                            <span>75%</span>
+                        </div>
+                        <div class="rating-bar">
+                            <span>4 stars</span>
+                            <div class="bar">
+                                <div class="bar-fill" style="width: 15%;"></div>
+                            </div>
+                            <span>15%</span>
+                        </div>
+                        <div class="rating-bar">
+                            <span>3 stars</span>
+                            <div class="bar">
+                                <div class="bar-fill" style="width: 5%;"></div>
+                            </div>
+                            <span>5%</span>
+                        </div>
+                        <div class="rating-bar">
+                            <span>2 stars</span>
+                            <div class="bar">
+                                <div class="bar-fill" style="width: 3%;"></div>
+                            </div>
+                            <span>3%</span>
+                        </div>
+                        <div class="rating-bar">
+                            <span>1 star</span>
+                            <div class="bar">
+                                <div class="bar-fill" style="width: 2%;"></div>
+                            </div>
+                            <span>2%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-filters">
+                    <div class="review-sort">
+                        <button class="tab-button">Most Recent</button>
+                        <button class="tab-button">Highest Rated</button>
+                        <button class="tab-button">Lowest Rated</button>
+                    </div>
+                    <div class="review-search">
+                        <input type="text" placeholder="Search reviews..." style="padding: 0.5rem; border-radius: var(--radius); border: 1px solid var(--lightgray);">
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-avatar">JD</div>
+                            <div>
+                                <h4>John Doe</h4>
+                                <span class="verified-badge">Verified Purchase</span>
+                            </div>
+                        </div>
+                        <div class="stars">★★★★★</div>
+                    </div>
+                    <h3>Amazing sound quality!</h3>
+                    <p>The sound quality is exceptional, and the noise cancellation works perfectly. Battery life is impressive, lasting through my entire workday.</p>
+                    <div class="review-images">
+                        <img src="https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb" alt="Review Image" class="review-image">
+                    </div>
+                    <div class="helpful-votes">
+                        <span>Was this review helpful?</span>
+                        <button class="vote-button">Yes (15)</button>
+                        <button class="vote-button">No (2)</button>
+                    </div>
+                </div>
+
+                <div class="write-review">
+                    <h2>Write a Review</h2>
+                    <form class="review-form">
+                        <div>
+                            <label>Your Rating</label>
+                            <div class="star-rating">
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="review-title">Review Title</label>
+                            <input type="text" id="review-title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="review-text">Your Review</label>
+                            <textarea id="review-text" rows="5" required></textarea>
+                        </div>
+                        <div class="image-upload">
+                            <p>Add Photos (Optional)</p>
+                            <p>Drag and drop images here or click to upload</p>
+                        </div>
+                        <button type="submit" class="action-button">Submit Review</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and content
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding content
+                button.classList.add('active');
+                document.getElementById(button.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Star rating functionality
+        document.querySelectorAll('.star-rating .star').forEach((star, index) => {
+            star.addEventListener('click', () => {
+                document.querySelectorAll('.star-rating .star').forEach((s, i) => {
+                    s.classList.toggle('active', i <= index);
+                });
+            });
+        });
+
+        // Quantity selector functionality
+        const quantityInput = document.querySelector('.quantity-input');
+        document.querySelectorAll('.quantity-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const currentValue = parseInt(quantityInput.value);
+                if (button.textContent === '+') {
+                    quantityInput.value = currentValue + 1;
+                } else if (currentValue > 1) {
+                    quantityInput.value = currentValue - 1;
+                }
+            });
+        });
+
+        // Variant selection
+        document.querySelectorAll('.variant-option').forEach(option => {
+            option.addEventListener('click', () => {
+                document.querySelectorAll('.variant-option').forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+            });
+        });
+
+        // Thumbnail image switching
+        document.querySelectorAll('.thumbnail').forEach(thumb => {
+            thumb.addEventListener('click', () => {
+                document.querySelector('.main-image').src = thumb.src;
+            });
+        });
+    </script>
+</body>
+</html> 

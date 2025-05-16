@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>MiniMart - Seller Portal</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --charcoal: #36454F;
+            --blush: #FEC5BB;
+            --white: #FFFFFF;
+            --plum: #4E2A5A;
+            --sage: #B2AC88;
+            --cream: #FFF8DC;
+            --midnight: #191970;
+            --terracotta: #E2725B;
+            --lightgray: #D3D3D3;
+            --success: #4CAF50;
+            --warning: #FFA500;
+            --danger: #DC3545;
+            --info: #17A2B8;
+            --shadow: 0 4px 16px rgba(30,30,60,0.07);
+            --radius: 16px;
+            --transition: 0.2s cubic-bezier(.4,0,.2,1);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Montserrat', Arial, sans-serif;
+            background: var(--cream);
+            color: var(--charcoal);
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: var(--midnight);
+            color: var(--white);
+            height: 100vh;
+            position: fixed;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--blush);
+            margin-bottom: 2rem;
+            display: block;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1rem;
+            color: var(--white);
+            text-decoration: none;
+            border-radius: var(--radius);
+            transition: all var(--transition);
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 2rem;
+            width: calc(100% - 250px);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .notification-badge {
+            background: var(--danger);
+            color: var(--white);
+            padding: 0.2rem 0.5rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .stat-title {
+            color: var(--charcoal);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--plum);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-trend {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .trend-up {
+            color: var(--success);
+        }
+
+        .trend-down {
+            color: var(--danger);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .product-list {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .action-button {
+            background: var(--plum);
+            color: var(--white);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .action-button.secondary {
+            background: var(--sage);
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .product-card {
+            background: var(--white);
+            border: 1px solid var(--lightgray);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: all var(--transition);
+        }
+
+        .product-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .product-details {
+            padding: 1rem;
+        }
+
+        .product-title {
+            margin: 0 0 0.5rem 0;
+            font-size: 1rem;
+        }
+
+        .product-price {
+            color: var(--plum);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-stock {
+            font-size: 0.9rem;
+            color: var(--charcoal);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .data-table th, .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--lightgray);
+        }
+
+        .data-table th {
+            background: var(--cream);
+            font-weight: 600;
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+        }
+
+        .status-badge.in-stock {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .status-badge.low-stock {
+            background: var(--warning);
+            color: var(--white);
+        }
+
+        .status-badge.out-of-stock {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        .analytics-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 1rem;
+        }
+
+        .analytics-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .analytics-filters {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .filter-button {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--lightgray);
+            border-radius: var(--radius);
+            background: var(--white);
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .filter-button.active {
+            background: var(--plum);
+            color: var(--white);
+            border-color: var(--plum);
+        }
+
+        .chart-placeholder {
+            width: 100%;
+            height: 200px;
+            background: var(--cream);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--charcoal);
+            margin: 1rem 0;
+        }
+
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 60px;
+            }
+
+            .logo, .nav-link span {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 60px;
+                width: calc(100% - 60px);
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--charcoal);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--lightgray);
+            border-radius: var(--radius);
+            font-size: 1rem;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        /* Chart Styles */
+        .chart {
+            width: 100%;
+            height: 300px;
+            position: relative;
+        }
+
+        .chart-bars {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            height: 100%;
+            padding: 1rem;
+        }
+
+        .chart-bar {
+            width: 40px;
+            background: var(--plum);
+            border-radius: var(--radius);
+            position: relative;
+            transition: height var(--transition);
+        }
+
+        .chart-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: var(--charcoal);
+        }
+
+        .chart-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: var(--charcoal);
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="#" class="logo">Seller Portal</a>
+        <nav>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active">
+                        📊 <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        📦 <span>Products</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        🛍️ <span>Orders</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        💰 <span>Earnings</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        📈 <span>Analytics</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        🎯 <span>Marketing</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        💬 <span>Messages</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        ⚙️ <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="header">
+            <h1>Seller Dashboard</h1>
+            <div class="user-menu">
+                <div class="notifications">
+                    <span class="notification-badge">2</span>
+                    🔔
+                </div>
+                <div class="user-profile">
+                    Seller Store
+                </div>
+            </div>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-title">Today's Sales</div>
+                <div class="stat-value">$1,289</div>
+                <div class="stat-trend trend-up">↑ 8% vs yesterday</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Total Orders</div>
+                <div class="stat-value">28</div>
+                <div class="stat-trend trend-up">↑ 12% vs yesterday</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Products Sold</div>
+                <div class="stat-value">45</div>
+                <div class="stat-trend trend-up">↑ 5% vs yesterday</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Conversion Rate</div>
+                <div class="stat-value">3.2%</div>
+                <div class="stat-trend trend-down">↓ 1% vs yesterday</div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="product-list">
+                <div class="product-header">
+                    <h2>Products</h2>
+                    <div class="product-actions">
+                        <button class="action-button">
+                            ➕ Add Product
+                        </button>
+                        <button class="action-button secondary">
+                            📥 Import
+                        </button>
+                    </div>
+                </div>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Sales</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Wireless Earbuds</td>
+                            <td>$129.99</td>
+                            <td>45</td>
+                            <td>128</td>
+                            <td><span class="status-badge in-stock">In Stock</span></td>
+                            <td><button class="action-button">Edit</button></td>
+                        </tr>
+                        <tr>
+                            <td>Smart Coffee Maker</td>
+                            <td>$149.99</td>
+                            <td>8</td>
+                            <td>64</td>
+                            <td><span class="status-badge low-stock">Low Stock</span></td>
+                            <td><button class="action-button">Edit</button></td>
+                        </tr>
+                        <tr>
+                            <td>4K Smart TV</td>
+                            <td>$599.99</td>
+                            <td>0</td>
+                            <td>32</td>
+                            <td><span class="status-badge out-of-stock">Out of Stock</span></td>
+                            <td><button class="action-button">Edit</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="analytics-section">
+                <div class="analytics-card">
+                    <div class="analytics-header">
+                        <h2>Sales Analytics</h2>
+                        <div class="analytics-filters">
+                            <button class="filter-button active">Week</button>
+                            <button class="filter-button">Month</button>
+                            <button class="filter-button">Year</button>
+                        </div>
+                    </div>
+                    <div class="chart-placeholder">
+                        Sales Chart
+                    </div>
+                </div>
+
+                <div class="analytics-card">
+                    <h2>Top Products</h2>
+                    <div class="product-grid">
+                        <div class="product-card">
+                            <img src="https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb" alt="Wireless Earbuds" class="product-image">
+                            <div class="product-details">
+                                <h3 class="product-title">Wireless Earbuds</h3>
+                                <div class="product-price">$129.99</div>
+                                <div class="product-stock">128 sold</div>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <img src="https://images.unsplash.com/photo-1517914309068-967f8779aa14" alt="Smart Coffee Maker" class="product-image">
+                            <div class="product-details">
+                                <h3 class="product-title">Smart Coffee Maker</h3>
+                                <div class="product-price">$149.99</div>
+                                <div class="product-stock">64 sold</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="seller-portal.js"></script>
+</body>
+</html> 

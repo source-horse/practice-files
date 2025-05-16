@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>MiniMart - Admin Marketing</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap" rel="stylesheet">
+    <style>
+        /* Import admin portal styles */
+        @import url('admin-portal.css');
+
+        .marketing-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .campaign-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .campaign-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .campaign-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .campaign-details {
+            padding: 1rem;
+        }
+
+        .campaign-status {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .campaign-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .campaign-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .bulk-actions {
+            background: var(--white);
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .marketing-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-input {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--lightgray);
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+        }
+
+        .performance-metric {
+            font-weight: 600;
+            color: var(--plum);
+        }
+
+        .metric-up {
+            color: var(--success);
+        }
+
+        .metric-down {
+            color: var(--danger);
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="admin-portal.html" class="logo">MiniMart Admin</a>
+        <nav>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="admin-portal.html" class="nav-link">
+                        📊 <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-users.html" class="nav-link">
+                        👥 <span>Users</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-products.html" class="nav-link">
+                        📦 <span>Products</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-orders.html" class="nav-link">
+                        🛍️ <span>Orders</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-finance.html" class="nav-link">
+                        💰 <span>Finance</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-marketing.html" class="nav-link active">
+                        📢 <span>Marketing</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-content.html" class="nav-link">
+                        📝 <span>Content</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-support.html" class="nav-link">
+                        🎯 <span>Support</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-settings.html" class="nav-link">
+                        ⚙️ <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="header">
+            <h1>Marketing Management</h1>
+            <div class="user-menu">
+                <div class="notifications">
+                    <span class="notification-badge">3</span>
+                    🔔
+                </div>
+                <div class="user-profile">
+                    Admin User
+                </div>
+            </div>
+        </header>
+
+        <div class="marketing-stats">
+            <div class="stat-card">
+                <div class="stat-title">Active Campaigns</div>
+                <div class="stat-value">12</div>
+                <div class="trend-up">↑ 2 new this month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Total Reach</div>
+                <div class="stat-value">45.2K</div>
+                <div class="trend-up">↑ 15% vs last month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Conversion Rate</div>
+                <div class="stat-value">3.8%</div>
+                <div class="trend-up">↑ 0.5% vs last month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">ROI</div>
+                <div class="stat-value">285%</div>
+                <div class="trend-up">↑ 12% vs last month</div>
+            </div>
+        </div>
+
+        <div class="bulk-actions">
+            <button class="action-button">
+                ➕ New Campaign
+            </button>
+            <button class="action-button secondary">
+                📊 Analytics
+            </button>
+            <button class="action-button secondary">
+                📥 Export Report
+            </button>
+        </div>
+
+        <div class="marketing-filters">
+            <input type="text" class="filter-input" placeholder="Search campaigns...">
+            <select class="filter-input">
+                <option value="">All Platforms</option>
+                <option value="email">Email</option>
+                <option value="social">Social Media</option>
+                <option value="ads">Paid Ads</option>
+            </select>
+            <select class="filter-input">
+                <option value="">All Status</option>
+                <option value="active">Active</option>
+                <option value="scheduled">Scheduled</option>
+                <option value="ended">Ended</option>
+            </select>
+            <select class="filter-input">
+                <option value="date">Sort by Date</option>
+                <option value="performance">Sort by Performance</option>
+                <option value="budget">Sort by Budget</option>
+            </select>
+        </div>
+
+        <div class="campaign-grid">
+            <div class="campaign-card">
+                <img src="https://via.placeholder.com/300x150" alt="Summer Sale" class="campaign-image">
+                <div class="campaign-details">
+                    <span class="status-badge completed">Active</span>
+                    <h3>Summer Sale Campaign</h3>
+                    <p>Special discounts on summer collection</p>
+                    <div class="campaign-stats">
+                        <div>Reach: <span class="performance-metric">12.5K</span></div>
+                        <div>CTR: <span class="performance-metric metric-up">4.2%</span></div>
+                        <div>Conversions: <span class="performance-metric">234</span></div>
+                        <div>ROI: <span class="performance-metric metric-up">312%</span></div>
+                    </div>
+                    <div class="campaign-actions">
+                        <button class="action-button">Edit</button>
+                        <button class="action-button secondary">End</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="campaign-card">
+                <img src="https://via.placeholder.com/300x150" alt="New Arrivals" class="campaign-image">
+                <div class="campaign-details">
+                    <span class="status-badge pending">Scheduled</span>
+                    <h3>New Arrivals Promotion</h3>
+                    <p>Introducing latest electronics</p>
+                    <div class="campaign-stats">
+                        <div>Budget: <span class="performance-metric">$2,500</span></div>
+                        <div>Duration: <span class="performance-metric">30 days</span></div>
+                        <div>Start Date: <span class="performance-metric">Apr 1</span></div>
+                        <div>Channels: <span class="performance-metric">3</span></div>
+                    </div>
+                    <div class="campaign-actions">
+                        <button class="action-button">Edit</button>
+                        <button class="action-button secondary">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="campaign-card">
+                <img src="https://via.placeholder.com/300x150" alt="Holiday Special" class="campaign-image">
+                <div class="campaign-details">
+                    <span class="status-badge cancelled">Ended</span>
+                    <h3>Holiday Special</h3>
+                    <p>Year-end holiday promotions</p>
+                    <div class="campaign-stats">
+                        <div>Reach: <span class="performance-metric">28.3K</span></div>
+                        <div>CTR: <span class="performance-metric metric-down">2.8%</span></div>
+                        <div>Conversions: <span class="performance-metric">456</span></div>
+                        <div>ROI: <span class="performance-metric metric-up">245%</span></div>
+                    </div>
+                    <div class="campaign-actions">
+                        <button class="action-button">View Report</button>
+                        <button class="action-button secondary">Archive</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h2>Campaign Performance</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Campaign</th>
+                        <th>Platform</th>
+                        <th>Status</th>
+                        <th>Reach</th>
+                        <th>Engagement</th>
+                        <th>Conversions</th>
+                        <th>ROI</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Summer Sale</td>
+                        <td>Multiple</td>
+                        <td><span class="status-badge completed">Active</span></td>
+                        <td>12.5K</td>
+                        <td>4.2%</td>
+                        <td>234</td>
+                        <td>312%</td>
+                        <td><button class="action-button">View</button></td>
+                    </tr>
+                    <tr>
+                        <td>New Arrivals</td>
+                        <td>Email</td>
+                        <td><span class="status-badge pending">Scheduled</span></td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td><button class="action-button">View</button></td>
+                    </tr>
+                    <tr>
+                        <td>Holiday Special</td>
+                        <td>Social</td>
+                        <td><span class="status-badge cancelled">Ended</span></td>
+                        <td>28.3K</td>
+                        <td>2.8%</td>
+                        <td>456</td>
+                        <td>245%</td>
+                        <td><button class="action-button">View</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        // Navigation active state
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html> 

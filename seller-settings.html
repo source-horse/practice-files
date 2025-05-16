@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>MiniMart - Seller Settings</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap" rel="stylesheet">
+    <style>
+        /* Import base styles from seller-portal.html */
+        @import url('seller-portal.css');
+
+        .settings-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+        }
+
+        .settings-nav {
+            background: var(--white);
+            padding: 1rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .settings-nav-item {
+            padding: 0.8rem 1rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .settings-nav-item:hover {
+            background: var(--cream);
+        }
+
+        .settings-nav-item.active {
+            background: var(--plum);
+            color: var(--white);
+        }
+
+        .settings-content {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .settings-section {
+            display: none;
+        }
+
+        .settings-section.active {
+            display: block;
+        }
+
+        .settings-header {
+            margin-bottom: 2rem;
+        }
+
+        .settings-header h2 {
+            margin: 0;
+            margin-bottom: 0.5rem;
+        }
+
+        .settings-header p {
+            color: var(--charcoal);
+            margin: 0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--lightgray);
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .switch-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--lightgray);
+        }
+
+        .switch-label {
+            flex-grow: 1;
+        }
+
+        .switch-label h4 {
+            margin: 0;
+            margin-bottom: 0.3rem;
+        }
+
+        .switch-label p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--charcoal);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--lightgray);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--plum);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+
+        .notification-group {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--lightgray);
+        }
+
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .notification-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .notification-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .notification-option input[type="checkbox"] {
+            width: auto;
+        }
+
+        .danger-zone {
+            margin-top: 3rem;
+            padding: 1.5rem;
+            border: 1px solid var(--danger);
+            border-radius: var(--radius);
+        }
+
+        .danger-zone h3 {
+            color: var(--danger);
+            margin-top: 0;
+        }
+
+        .danger-action {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--lightgray);
+        }
+
+        .danger-action:last-child {
+            border-bottom: none;
+        }
+
+        .danger-button {
+            background: var(--danger);
+            color: var(--white);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+        }
+
+        .danger-button:hover {
+            background: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="seller-portal.html" class="logo">Seller Portal</a>
+        <nav>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="seller-portal.html" class="nav-link">
+                        📊 <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-products.html" class="nav-link">
+                        📦 <span>Products</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-orders.html" class="nav-link">
+                        🛍️ <span>Orders</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-earnings.html" class="nav-link">
+                        💰 <span>Earnings</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-analytics.html" class="nav-link">
+                        📈 <span>Analytics</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-marketing.html" class="nav-link">
+                        🎯 <span>Marketing</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-messages.html" class="nav-link">
+                        💬 <span>Messages</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-settings.html" class="nav-link active">
+                        ⚙️ <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="header">
+            <h1>Settings</h1>
+            <div class="user-menu">
+                <div class="notifications">
+                    <span class="notification-badge">2</span>
+                    🔔
+                </div>
+                <div class="user-profile">
+                    Seller Store
+                </div>
+            </div>
+        </header>
+
+        <div class="settings-container">
+            <div class="settings-nav">
+                <div class="settings-nav-item active" data-section="account">
+                    👤 Account Settings
+                </div>
+                <div class="settings-nav-item" data-section="store">
+                    🏪 Store Settings
+                </div>
+                <div class="settings-nav-item" data-section="shipping">
+                    🚚 Shipping
+                </div>
+                <div class="settings-nav-item" data-section="payment">
+                    💳 Payment Methods
+                </div>
+                <div class="settings-nav-item" data-section="notifications">
+                    🔔 Notifications
+                </div>
+                <div class="settings-nav-item" data-section="security">
+                    🔒 Security
+                </div>
+                <div class="settings-nav-item" data-section="api">
+                    🔌 API Access
+                </div>
+            </div>
+
+            <div class="settings-content">
+                <div class="settings-section active" id="account">
+                    <div class="settings-header">
+                        <h2>Account Settings</h2>
+                        <p>Manage your account information and preferences</p>
+                    </div>
+
+                    <form id="accountForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <input type="text" value="John" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <input type="text" value="Doe" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" value="john@example.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" value="+1 234 567 8900">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Time Zone</label>
+                            <select>
+                                <option>UTC-8 (Pacific Time)</option>
+                                <option>UTC-5 (Eastern Time)</option>
+                                <option>UTC+0 (GMT)</option>
+                                <option>UTC+1 (Central European Time)</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="action-button">Save Changes</button>
+                    </form>
+                </div>
+
+                <div class="settings-section" id="store">
+                    <div class="settings-header">
+                        <h2>Store Settings</h2>
+                        <p>Configure your store's appearance and functionality</p>
+                    </div>
+
+                    <form id="storeForm">
+                        <div class="form-group">
+                            <label>Store Name</label>
+                            <input type="text" value="My Awesome Store" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Store Description</label>
+                            <textarea>Welcome to My Awesome Store! We offer the best products at great prices.</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Store Logo</label>
+                            <input type="file" accept="image/*">
+                        </div>
+
+                        <div class="switch-group">
+                            <div class="switch-label">
+                                <h4>Maintenance Mode</h4>
+                                <p>Temporarily disable your store for maintenance</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="switch-group">
+                            <div class="switch-label">
+                                <h4>Customer Reviews</h4>
+                                <p>Allow customers to leave product reviews</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="action-button">Save Changes</button>
+                    </form>
+                </div>
+
+                <div class="settings-section" id="shipping">
+                    <div class="settings-header">
+                        <h2>Shipping Settings</h2>
+                        <p>Configure shipping methods and rates</p>
+                    </div>
+
+                    <!-- Shipping settings content -->
+                </div>
+
+                <div class="settings-section" id="payment">
+                    <div class="settings-header">
+                        <h2>Payment Methods</h2>
+                        <p>Manage your payment methods and preferences</p>
+                    </div>
+
+                    <!-- Payment settings content -->
+                </div>
+
+                <div class="settings-section" id="notifications">
+                    <div class="settings-header">
+                        <h2>Notification Preferences</h2>
+                        <p>Choose how you want to be notified about store activities</p>
+                    </div>
+
+                    <div class="notification-group">
+                        <div class="notification-header">
+                            <h3>Order Notifications</h3>
+                        </div>
+                        <div class="notification-options">
+                            <label class="notification-option">
+                                <input type="checkbox" checked>
+                                Email
+                            </label>
+                            <label class="notification-option">
+                                <input type="checkbox" checked>
+                                SMS
+                            </label>
+                            <label class="notification-option">
+                                <input type="checkbox" checked>
+                                Push
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="notification-group">
+                        <div class="notification-header">
+                            <h3>Message Notifications</h3>
+                        </div>
+                        <div class="notification-options">
+                            <label class="notification-option">
+                                <input type="checkbox" checked>
+                                Email
+                            </label>
+                            <label class="notification-option">
+                                <input type="checkbox" checked>
+                                SMS
+                            </label>
+                            <label class="notification-option">
+                                <input type="checkbox" checked>
+                                Push
+                            </label>
+                        </div>
+                    </div>
+
+                    <button class="action-button">Save Preferences</button>
+                </div>
+
+                <div class="settings-section" id="security">
+                    <div class="settings-header">
+                        <h2>Security Settings</h2>
+                        <p>Manage your account security and privacy</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Current Password</label>
+                        <input type="password">
+                    </div>
+
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Confirm New Password</label>
+                        <input type="password">
+                    </div>
+
+                    <div class="switch-group">
+                        <div class="switch-label">
+                            <h4>Two-Factor Authentication</h4>
+                            <p>Add an extra layer of security to your account</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <button class="action-button">Update Security Settings</button>
+
+                    <div class="danger-zone">
+                        <h3>Danger Zone</h3>
+                        <div class="danger-action">
+                            <div>
+                                <h4>Deactivate Account</h4>
+                                <p>Temporarily disable your account</p>
+                            </div>
+                            <button class="danger-button" onclick="settingsManager.deactivateAccount()">Deactivate</button>
+                        </div>
+                        <div class="danger-action">
+                            <div>
+                                <h4>Delete Account</h4>
+                                <p>Permanently delete your account and all data</p>
+                            </div>
+                            <button class="danger-button" onclick="settingsManager.deleteAccount()">Delete</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section" id="api">
+                    <div class="settings-header">
+                        <h2>API Access</h2>
+                        <p>Manage API keys and access tokens</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>API Key</label>
+                        <div class="form-row">
+                            <input type="text" value="sk_test_123456789" readonly>
+                            <button class="action-button" onclick="settingsManager.regenerateApiKey()">Regenerate</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Webhook URL</label>
+                        <input type="url" value="https://mystore.com/webhook">
+                    </div>
+
+                    <button class="action-button">Save API Settings</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        class SettingsManager {
+            constructor() {
+                this.setupEventListeners();
+            }
+
+            setupEventListeners() {
+                // Navigation
+                document.querySelectorAll('.settings-nav-item').forEach(item => {
+                    item.addEventListener('click', () => this.switchSection(item.dataset.section));
+                });
+
+                // Forms
+                document.querySelectorAll('form').forEach(form => {
+                    form.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        this.saveChanges(e.target.id);
+                    });
+                });
+            }
+
+            switchSection(sectionId) {
+                // Update navigation
+                document.querySelectorAll('.settings-nav-item').forEach(item => {
+                    item.classList.toggle('active', item.dataset.section === sectionId);
+                });
+
+                // Update content
+                document.querySelectorAll('.settings-section').forEach(section => {
+                    section.classList.toggle('active', section.id === sectionId);
+                });
+            }
+
+            saveChanges(formId) {
+                // Demo implementation
+                alert(`Changes saved for ${formId}`);
+            }
+
+            regenerateApiKey() {
+                if (confirm('Are you sure you want to regenerate your API key? This will invalidate your current key.')) {
+                    // Demo implementation
+                    alert('New API key generated');
+                }
+            }
+
+            deactivateAccount() {
+                if (confirm('Are you sure you want to deactivate your account? You can reactivate it later.')) {
+                    // Demo implementation
+                    alert('Account deactivated');
+                }
+            }
+
+            deleteAccount() {
+                if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                    // Demo implementation
+                    alert('Account deleted');
+                }
+            }
+        }
+
+        // Initialize SettingsManager
+        const settingsManager = new SettingsManager();
+    </script>
+</body>
+</html> 

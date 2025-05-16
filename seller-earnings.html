@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>MiniMart - Seller Earnings</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap" rel="stylesheet">
+    <style>
+        /* Import base styles from seller-portal.html */
+        @import url('seller-portal.css');
+
+        .earnings-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .summary-title {
+            font-size: 0.9rem;
+            color: var(--charcoal);
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--plum);
+        }
+
+        .summary-trend {
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .earnings-chart {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .chart-filters {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .filter-button {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--lightgray);
+            border-radius: var(--radius);
+            background: var(--white);
+            cursor: pointer;
+        }
+
+        .filter-button.active {
+            background: var(--plum);
+            color: var(--white);
+            border-color: var(--plum);
+        }
+
+        .transactions {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .transaction-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .filter-input {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--lightgray);
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+        }
+
+        .transaction-amount {
+            font-weight: 600;
+        }
+
+        .transaction-amount.positive {
+            color: var(--success);
+        }
+
+        .transaction-amount.negative {
+            color: var(--danger);
+        }
+
+        .transaction-status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+        }
+
+        .transaction-status.completed {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .transaction-status.pending {
+            background: var(--warning);
+            color: var(--white);
+        }
+
+        .transaction-status.failed {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+
+        .chart-bars {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            height: 100%;
+            padding-bottom: 2rem;
+        }
+
+        .chart-bar {
+            width: 40px;
+            background: var(--plum);
+            border-radius: var(--radius);
+            position: relative;
+            transition: height 0.3s ease;
+        }
+
+        .chart-bar-label {
+            position: absolute;
+            bottom: -2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: var(--charcoal);
+        }
+
+        .chart-bar-value {
+            position: absolute;
+            top: -1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: var(--charcoal);
+        }
+
+        .payout-section {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-top: 2rem;
+        }
+
+        .payout-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .payout-method {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border: 1px solid var(--lightgray);
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+        }
+
+        .payout-method-icon {
+            font-size: 1.5rem;
+        }
+
+        .payout-method-details {
+            flex-grow: 1;
+        }
+
+        .payout-method-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="seller-portal.html" class="logo">Seller Portal</a>
+        <nav>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="seller-portal.html" class="nav-link">
+                        📊 <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-products.html" class="nav-link">
+                        📦 <span>Products</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-orders.html" class="nav-link">
+                        🛍️ <span>Orders</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-earnings.html" class="nav-link active">
+                        💰 <span>Earnings</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-analytics.html" class="nav-link">
+                        📈 <span>Analytics</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-marketing.html" class="nav-link">
+                        🎯 <span>Marketing</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-messages.html" class="nav-link">
+                        💬 <span>Messages</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="seller-settings.html" class="nav-link">
+                        ⚙️ <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="header">
+            <h1>Earnings</h1>
+            <div class="user-menu">
+                <div class="notifications">
+                    <span class="notification-badge">2</span>
+                    🔔
+                </div>
+                <div class="user-profile">
+                    Seller Store
+                </div>
+            </div>
+        </header>
+
+        <div class="earnings-summary">
+            <div class="summary-card">
+                <div class="summary-title">Total Earnings</div>
+                <div class="summary-value">$12,458.90</div>
+                <div class="summary-trend trend-up">↑ 15% vs last month</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-title">Available Balance</div>
+                <div class="summary-value">$3,245.60</div>
+                <div class="summary-trend">Next payout in 5 days</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-title">Pending Balance</div>
+                <div class="summary-value">$1,890.30</div>
+                <div class="summary-trend">From 24 orders</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-title">Last Payout</div>
+                <div class="summary-value">$2,567.80</div>
+                <div class="summary-trend">March 1, 2024</div>
+            </div>
+        </div>
+
+        <div class="earnings-chart">
+            <div class="chart-header">
+                <h2>Earnings Overview</h2>
+                <div class="chart-filters">
+                    <button class="filter-button active" data-period="week">Week</button>
+                    <button class="filter-button" data-period="month">Month</button>
+                    <button class="filter-button" data-period="year">Year</button>
+                </div>
+            </div>
+            <div class="chart-container" id="earningsChart">
+                <!-- Chart will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <div class="transactions">
+            <div class="transaction-filters">
+                <input type="text" class="filter-input" placeholder="Search transactions..." id="searchTransactions">
+                <select class="filter-input" id="transactionType">
+                    <option value="">All Types</option>
+                    <option value="sale">Sales</option>
+                    <option value="payout">Payouts</option>
+                    <option value="refund">Refunds</option>
+                </select>
+                <select class="filter-input" id="transactionStatus">
+                    <option value="">All Status</option>
+                    <option value="completed">Completed</option>
+                    <option value="pending">Pending</option>
+                    <option value="failed">Failed</option>
+                </select>
+                <button class="action-button" onclick="exportTransactions()">
+                    📤 Export
+                </button>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Transaction ID</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionsTable">
+                    <!-- Transactions will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="payout-section">
+            <div class="payout-header">
+                <h2>Payout Methods</h2>
+                <button class="action-button" onclick="addPayoutMethod()">
+                    ➕ Add Method
+                </button>
+            </div>
+            <div id="payoutMethods">
+                <!-- Payout methods will be populated by JavaScript -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        class EarningsManager {
+            constructor() {
+                this.transactions = [
+                    {
+                        id: 'TRX-001',
+                        date: '2024-03-15',
+                        type: 'sale',
+                        amount: 299.97,
+                        status: 'completed'
+                    },
+                    {
+                        id: 'TRX-002',
+                        date: '2024-03-14',
+                        type: 'payout',
+                        amount: -2567.80,
+                        status: 'completed'
+                    },
+                    {
+                        id: 'TRX-003',
+                        date: '2024-03-13',
+                        type: 'refund',
+                        amount: -49.99,
+                        status: 'pending'
+                    }
+                ];
+
+                this.payoutMethods = [
+                    {
+                        id: 1,
+                        type: 'bank',
+                        name: 'Bank Account',
+                        details: '**** 1234',
+                        isDefault: true
+                    },
+                    {
+                        id: 2,
+                        type: 'paypal',
+                        name: 'PayPal',
+                        details: 'seller@example.com',
+                        isDefault: false
+                    }
+                ];
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.refreshTransactionsTable();
+                this.refreshPayoutMethods();
+                this.updateEarningsChart('week');
+            }
+
+            setupEventListeners() {
+                document.getElementById('searchTransactions').addEventListener('input', () => this.applyFilters());
+                document.getElementById('transactionType').addEventListener('change', () => this.applyFilters());
+                document.getElementById('transactionStatus').addEventListener('change', () => this.applyFilters());
+
+                document.querySelectorAll('.filter-button').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
+                        e.target.classList.add('active');
+                        this.updateEarningsChart(e.target.dataset.period);
+                    });
+                });
+            }
+
+            applyFilters() {
+                const searchTerm = document.getElementById('searchTransactions').value.toLowerCase();
+                const type = document.getElementById('transactionType').value;
+                const status = document.getElementById('transactionStatus').value;
+
+                let filtered = this.transactions.filter(transaction => {
+                    const matchesSearch = transaction.id.toLowerCase().includes(searchTerm);
+                    const matchesType = !type || transaction.type === type;
+                    const matchesStatus = !status || transaction.status === status;
+                    return matchesSearch && matchesType && matchesStatus;
+                });
+
+                this.refreshTransactionsTable(filtered);
+            }
+
+            refreshTransactionsTable(transactions = this.transactions) {
+                const tbody = document.getElementById('transactionsTable');
+                tbody.innerHTML = transactions.map(transaction => `
+                    <tr>
+                        <td>${transaction.date}</td>
+                        <td>${transaction.id}</td>
+                        <td>${transaction.type}</td>
+                        <td class="transaction-amount ${transaction.amount >= 0 ? 'positive' : 'negative'}">
+                            ${this.formatCurrency(transaction.amount)}
+                        </td>
+                        <td><span class="transaction-status ${transaction.status}">${transaction.status}</span></td>
+                        <td>
+                            <button class="action-button" onclick="earningsManager.viewTransaction('${transaction.id}')">View</button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            refreshPayoutMethods() {
+                const container = document.getElementById('payoutMethods');
+                container.innerHTML = this.payoutMethods.map(method => `
+                    <div class="payout-method">
+                        <div class="payout-method-icon">
+                            ${method.type === 'bank' ? '🏦' : '💳'}
+                        </div>
+                        <div class="payout-method-details">
+                            <h3>${method.name}</h3>
+                            <p>${method.details}</p>
+                            ${method.isDefault ? '<span class="status-badge in-stock">Default</span>' : ''}
+                        </div>
+                        <div class="payout-method-actions">
+                            ${!method.isDefault ? `
+                                <button class="action-button" onclick="earningsManager.setDefaultMethod(${method.id})">
+                                    Set Default
+                                </button>
+                            ` : ''}
+                            <button class="action-button secondary" onclick="earningsManager.editPayoutMethod(${method.id})">
+                                Edit
+                            </button>
+                            <button class="action-button secondary" onclick="earningsManager.deletePayoutMethod(${method.id})">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            updateEarningsChart(period) {
+                // Simulate different data based on period
+                const data = this.generateChartData(period);
+                const container = document.getElementById('earningsChart');
+                
+                container.innerHTML = `
+                    <div class="chart-bars">
+                        ${data.map(item => `
+                            <div class="chart-bar" style="height: ${(item.value / data.maxValue) * 100}%">
+                                <span class="chart-bar-value">${this.formatCurrency(item.value)}</span>
+                                <span class="chart-bar-label">${item.label}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            generateChartData(period) {
+                let data = [];
+                const maxValue = 5000;
+
+                switch(period) {
+                    case 'week':
+                        data = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => ({
+                            label: day,
+                            value: Math.random() * maxValue
+                        }));
+                        break;
+                    case 'month':
+                        data = Array.from({length: 12}, (_, i) => ({
+                            label: `Week ${i + 1}`,
+                            value: Math.random() * maxValue
+                        }));
+                        break;
+                    case 'year':
+                        data = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map(month => ({
+                            label: month,
+                            value: Math.random() * maxValue
+                        }));
+                        break;
+                }
+
+                data.maxValue = maxValue;
+                return data;
+            }
+
+            viewTransaction(id) {
+                const transaction = this.transactions.find(t => t.id === id);
+                if (!transaction) return;
+
+                alert(`Transaction Details:\nID: ${transaction.id}\nDate: ${transaction.date}\nType: ${transaction.type}\nAmount: ${this.formatCurrency(transaction.amount)}\nStatus: ${transaction.status}`);
+            }
+
+            addPayoutMethod() {
+                const type = prompt('Enter payout method type (bank/paypal):');
+                if (!type) return;
+
+                const name = prompt('Enter account name:');
+                if (!name) return;
+
+                const details = prompt('Enter account details:');
+                if (!details) return;
+
+                this.payoutMethods.push({
+                    id: this.payoutMethods.length + 1,
+                    type,
+                    name,
+                    details,
+                    isDefault: this.payoutMethods.length === 0
+                });
+
+                this.refreshPayoutMethods();
+            }
+
+            editPayoutMethod(id) {
+                const method = this.payoutMethods.find(m => m.id === id);
+                if (!method) return;
+
+                const name = prompt('Enter new account name:', method.name);
+                if (!name) return;
+
+                const details = prompt('Enter new account details:', method.details);
+                if (!details) return;
+
+                method.name = name;
+                method.details = details;
+                this.refreshPayoutMethods();
+            }
+
+            deletePayoutMethod(id) {
+                const method = this.payoutMethods.find(m => m.id === id);
+                if (!method) return;
+
+                if (method.isDefault) {
+                    alert('Cannot delete default payout method');
+                    return;
+                }
+
+                if (confirm('Are you sure you want to delete this payout method?')) {
+                    this.payoutMethods = this.payoutMethods.filter(m => m.id !== id);
+                    this.refreshPayoutMethods();
+                }
+            }
+
+            setDefaultMethod(id) {
+                this.payoutMethods.forEach(method => {
+                    method.isDefault = method.id === id;
+                });
+                this.refreshPayoutMethods();
+            }
+
+            formatCurrency(amount) {
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD'
+                }).format(amount);
+            }
+
+            exportTransactions() {
+                const csv = [
+                    ['Date', 'Transaction ID', 'Type', 'Amount', 'Status'].join(','),
+                    ...this.transactions.map(t => [
+                        t.date,
+                        t.id,
+                        t.type,
+                        t.amount,
+                        t.status
+                    ].join(','))
+                ].join('\n');
+
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'transactions.csv';
+                a.click();
+                window.URL.revokeObjectURL(url);
+            }
+        }
+
+        // Initialize EarningsManager
+        const earningsManager = new EarningsManager();
+        earningsManager.init();
+
+        // Global functions
+        function exportTransactions() {
+            earningsManager.exportTransactions();
+        }
+
+        function addPayoutMethod() {
+            earningsManager.addPayoutMethod();
+        }
+    </script>
+</body>
+</html> 

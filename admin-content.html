@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>MiniMart - Admin Content</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap" rel="stylesheet">
+    <style>
+        /* Import admin portal styles */
+        @import url('admin-portal.css');
+
+        .content-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .content-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-input {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--lightgray);
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .content-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .content-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .content-details {
+            padding: 1rem;
+        }
+
+        .content-type {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+            background: var(--sage);
+            color: var(--white);
+        }
+
+        .content-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .content-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .bulk-actions {
+            background: var(--white);
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .editor-container {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .editor-toolbar {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--lightgray);
+        }
+
+        .editor-content {
+            min-height: 300px;
+            padding: 1rem;
+            border: 1px solid var(--lightgray);
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+        }
+
+        .media-library {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .media-item {
+            position: relative;
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .media-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .media-item-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 0.5rem;
+            background: rgba(0,0,0,0.7);
+            color: var(--white);
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="admin-portal.html" class="logo">MiniMart Admin</a>
+        <nav>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="admin-portal.html" class="nav-link">
+                        📊 <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-users.html" class="nav-link">
+                        👥 <span>Users</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-products.html" class="nav-link">
+                        📦 <span>Products</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-orders.html" class="nav-link">
+                        🛍️ <span>Orders</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-finance.html" class="nav-link">
+                        💰 <span>Finance</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-marketing.html" class="nav-link">
+                        📢 <span>Marketing</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-content.html" class="nav-link active">
+                        📝 <span>Content</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-support.html" class="nav-link">
+                        🎯 <span>Support</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-settings.html" class="nav-link">
+                        ⚙️ <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="header">
+            <h1>Content Management</h1>
+            <div class="user-menu">
+                <div class="notifications">
+                    <span class="notification-badge">3</span>
+                    🔔
+                </div>
+                <div class="user-profile">
+                    Admin User
+                </div>
+            </div>
+        </header>
+
+        <div class="content-stats">
+            <div class="stat-card">
+                <div class="stat-title">Total Pages</div>
+                <div class="stat-value">24</div>
+                <div class="trend-up">↑ 2 new this month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Blog Posts</div>
+                <div class="stat-value">156</div>
+                <div class="trend-up">↑ 8 new this month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Media Files</div>
+                <div class="stat-value">1.2K</div>
+                <div class="trend-up">↑ 45 new this month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Categories</div>
+                <div class="stat-value">18</div>
+                <div class="trend-up">↑ 2 new this month</div>
+            </div>
+        </div>
+
+        <div class="bulk-actions">
+            <button class="action-button">
+                ➕ New Page
+            </button>
+            <button class="action-button secondary">
+                📝 New Post
+            </button>
+            <button class="action-button secondary">
+                🖼️ Upload Media
+            </button>
+            <button class="action-button secondary">
+                🗂️ Manage Categories
+            </button>
+        </div>
+
+        <div class="content-filters">
+            <input type="text" class="filter-input" placeholder="Search content...">
+            <select class="filter-input">
+                <option value="">All Types</option>
+                <option value="page">Pages</option>
+                <option value="post">Blog Posts</option>
+                <option value="media">Media</option>
+            </select>
+            <select class="filter-input">
+                <option value="">All Status</option>
+                <option value="published">Published</option>
+                <option value="draft">Draft</option>
+                <option value="scheduled">Scheduled</option>
+            </select>
+            <select class="filter-input">
+                <option value="date">Sort by Date</option>
+                <option value="title">Sort by Title</option>
+                <option value="author">Sort by Author</option>
+            </select>
+        </div>
+
+        <div class="editor-container">
+            <div class="editor-toolbar">
+                <button class="action-button secondary">Bold</button>
+                <button class="action-button secondary">Italic</button>
+                <button class="action-button secondary">Link</button>
+                <button class="action-button secondary">Image</button>
+                <button class="action-button secondary">List</button>
+                <button class="action-button secondary">Quote</button>
+                <button class="action-button secondary">Code</button>
+            </div>
+            <div class="editor-content" contenteditable="true">
+                Start writing your content here...
+            </div>
+            <div class="content-actions">
+                <button class="action-button">Publish</button>
+                <button class="action-button secondary">Save Draft</button>
+                <button class="action-button secondary">Preview</button>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h2>Media Library</h2>
+            <div class="media-library">
+                <div class="media-item">
+                    <img src="https://via.placeholder.com/150" alt="Image 1">
+                    <div class="media-item-overlay">image1.jpg</div>
+                </div>
+                <div class="media-item">
+                    <img src="https://via.placeholder.com/150" alt="Image 2">
+                    <div class="media-item-overlay">image2.jpg</div>
+                </div>
+                <div class="media-item">
+                    <img src="https://via.placeholder.com/150" alt="Image 3">
+                    <div class="media-item-overlay">image3.jpg</div>
+                </div>
+                <div class="media-item">
+                    <img src="https://via.placeholder.com/150" alt="Image 4">
+                    <div class="media-item-overlay">image4.jpg</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h2>Recent Content</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Type</th>
+                        <th>Author</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Views</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Welcome to MiniMart</td>
+                        <td>Page</td>
+                        <td>Admin</td>
+                        <td>2024-03-15</td>
+                        <td><span class="status-badge completed">Published</span></td>
+                        <td>1,234</td>
+                        <td>
+                            <button class="action-button">Edit</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Spring Collection 2024</td>
+                        <td>Blog Post</td>
+                        <td>Jane Smith</td>
+                        <td>2024-03-14</td>
+                        <td><span class="status-badge pending">Draft</span></td>
+                        <td>-</td>
+                        <td>
+                            <button class="action-button">Edit</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Shopping Guide</td>
+                        <td>Page</td>
+                        <td>Admin</td>
+                        <td>2024-03-13</td>
+                        <td><span class="status-badge completed">Published</span></td>
+                        <td>856</td>
+                        <td>
+                            <button class="action-button">Edit</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        // Navigation active state
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html> 

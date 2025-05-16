@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>MiniMart - Admin Products</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap" rel="stylesheet">
+    <style>
+        /* Import admin portal styles */
+        @import url('admin-portal.css');
+
+        .product-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-input {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--lightgray);
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .product-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .product-details {
+            padding: 1rem;
+        }
+
+        .product-category {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            background: var(--sage);
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price {
+            color: var(--plum);
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+        }
+
+        .product-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .bulk-actions {
+            background: var(--white);
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .stock-low {
+            color: var(--warning);
+        }
+
+        .stock-out {
+            color: var(--danger);
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="admin-portal.html" class="logo">MiniMart Admin</a>
+        <nav>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="admin-portal.html" class="nav-link">
+                        📊 <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-users.html" class="nav-link">
+                        👥 <span>Users</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-products.html" class="nav-link active">
+                        📦 <span>Products</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-orders.html" class="nav-link">
+                        🛍️ <span>Orders</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-finance.html" class="nav-link">
+                        💰 <span>Finance</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-marketing.html" class="nav-link">
+                        📢 <span>Marketing</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-content.html" class="nav-link">
+                        📝 <span>Content</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-support.html" class="nav-link">
+                        🎯 <span>Support</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-settings.html" class="nav-link">
+                        ⚙️ <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="header">
+            <h1>Products Management</h1>
+            <div class="user-menu">
+                <div class="notifications">
+                    <span class="notification-badge">3</span>
+                    🔔
+                </div>
+                <div class="user-profile">
+                    Admin User
+                </div>
+            </div>
+        </header>
+
+        <div class="bulk-actions">
+            <button class="action-button">
+                ➕ Add Product
+            </button>
+            <button class="action-button secondary">
+                📥 Import Products
+            </button>
+            <button class="action-button secondary">
+                📤 Export Products
+            </button>
+            <button class="action-button secondary">
+                🗑️ Bulk Delete
+            </button>
+        </div>
+
+        <div class="product-filters">
+            <input type="text" class="filter-input" placeholder="Search products...">
+            <select class="filter-input">
+                <option value="">All Categories</option>
+                <option value="electronics">Electronics</option>
+                <option value="fashion">Fashion</option>
+                <option value="home">Home</option>
+                <option value="beauty">Beauty</option>
+            </select>
+            <select class="filter-input">
+                <option value="">All Stock Status</option>
+                <option value="in-stock">In Stock</option>
+                <option value="low-stock">Low Stock</option>
+                <option value="out-of-stock">Out of Stock</option>
+            </select>
+            <select class="filter-input">
+                <option value="name">Sort by Name</option>
+                <option value="price">Sort by Price</option>
+                <option value="stock">Sort by Stock</option>
+                <option value="sales">Sort by Sales</option>
+            </select>
+        </div>
+
+        <div class="product-grid">
+            <div class="product-card">
+                <img src="https://via.placeholder.com/300" alt="Wireless Earbuds" class="product-image">
+                <div class="product-details">
+                    <span class="product-category">Electronics</span>
+                    <h3>Wireless Earbuds</h3>
+                    <div class="product-price">$129.99</div>
+                    <div class="product-stats">
+                        <div>Stock: <span class="stock-low">5 units</span></div>
+                        <div>Sales: 128</div>
+                    </div>
+                    <div class="product-actions">
+                        <button class="action-button">Edit</button>
+                        <button class="action-button secondary">Delete</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/300" alt="Smart Coffee Maker" class="product-image">
+                <div class="product-details">
+                    <span class="product-category">Home</span>
+                    <h3>Smart Coffee Maker</h3>
+                    <div class="product-price">$199.99</div>
+                    <div class="product-stats">
+                        <div>Stock: 42 units</div>
+                        <div>Sales: 64</div>
+                    </div>
+                    <div class="product-actions">
+                        <button class="action-button">Edit</button>
+                        <button class="action-button secondary">Delete</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/300" alt="4K Smart TV" class="product-image">
+                <div class="product-details">
+                    <span class="product-category">Electronics</span>
+                    <h3>4K Smart TV</h3>
+                    <div class="product-price">$699.99</div>
+                    <div class="product-stats">
+                        <div>Stock: <span class="stock-out">0 units</span></div>
+                        <div>Sales: 32</div>
+                    </div>
+                    <div class="product-actions">
+                        <button class="action-button">Edit</button>
+                        <button class="action-button secondary">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h2>Product Performance</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Category</th>
+                        <th>Stock</th>
+                        <th>Price</th>
+                        <th>Sales</th>
+                        <th>Revenue</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Wireless Earbuds</td>
+                        <td>Electronics</td>
+                        <td><span class="stock-low">5 units</span></td>
+                        <td>$129.99</td>
+                        <td>128</td>
+                        <td>$16,638.72</td>
+                        <td><span class="status-badge pending">Low Stock</span></td>
+                        <td>
+                            <button class="action-button">View</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Smart Coffee Maker</td>
+                        <td>Home</td>
+                        <td>42 units</td>
+                        <td>$199.99</td>
+                        <td>64</td>
+                        <td>$12,799.36</td>
+                        <td><span class="status-badge completed">In Stock</span></td>
+                        <td>
+                            <button class="action-button">View</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4K Smart TV</td>
+                        <td>Electronics</td>
+                        <td><span class="stock-out">0 units</span></td>
+                        <td>$699.99</td>
+                        <td>32</td>
+                        <td>$22,399.68</td>
+                        <td><span class="status-badge cancelled">Out of Stock</span></td>
+                        <td>
+                            <button class="action-button">View</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        // Navigation active state
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html> 

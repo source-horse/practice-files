@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>MiniMart - Admin Portal</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --charcoal: #36454F;
+            --blush: #FEC5BB;
+            --white: #FFFFFF;
+            --plum: #4E2A5A;
+            --sage: #B2AC88;
+            --cream: #FFF8DC;
+            --midnight: #191970;
+            --terracotta: #E2725B;
+            --lightgray: #D3D3D3;
+            --success: #4CAF50;
+            --warning: #FFA500;
+            --danger: #DC3545;
+            --info: #17A2B8;
+            --shadow: 0 4px 16px rgba(30,30,60,0.07);
+            --radius: 16px;
+            --transition: 0.2s cubic-bezier(.4,0,.2,1);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Montserrat', Arial, sans-serif;
+            background: var(--cream);
+            color: var(--charcoal);
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: var(--midnight);
+            color: var(--white);
+            height: 100vh;
+            position: fixed;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--blush);
+            margin-bottom: 2rem;
+            display: block;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1rem;
+            color: var(--white);
+            text-decoration: none;
+            border-radius: var(--radius);
+            transition: all var(--transition);
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 2rem;
+            width: calc(100% - 250px);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .notification-badge {
+            background: var(--danger);
+            color: var(--white);
+            padding: 0.2rem 0.5rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .stat-title {
+            color: var(--charcoal);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--plum);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-trend {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .trend-up {
+            color: var(--success);
+        }
+
+        .trend-down {
+            color: var(--danger);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .chart-container {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .recent-activity {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--lightgray);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+        }
+
+        .activity-icon.order {
+            background: var(--success);
+        }
+
+        .activity-icon.user {
+            background: var(--info);
+        }
+
+        .activity-icon.alert {
+            background: var(--warning);
+        }
+
+        .activity-details h4 {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .activity-details p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--charcoal);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .data-table th, .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--lightgray);
+        }
+
+        .data-table th {
+            background: var(--cream);
+            font-weight: 600;
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+        }
+
+        .status-badge.completed {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .status-badge.pending {
+            background: var(--warning);
+            color: var(--white);
+        }
+
+        .status-badge.cancelled {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        .action-button {
+            background: var(--plum);
+            color: var(--white);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 60px;
+            }
+
+            .logo, .nav-link span {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 60px;
+                width: calc(100% - 60px);
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="#" class="logo">MiniMart Admin</a>
+        <nav>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active">
+                        📊 <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        👥 <span>Users</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        📦 <span>Products</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        🛍️ <span>Orders</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        💰 <span>Finance</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        📢 <span>Marketing</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        📝 <span>Content</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        🎯 <span>Support</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        ⚙️ <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="header">
+            <h1>Dashboard</h1>
+            <div class="user-menu">
+                <div class="notifications">
+                    <span class="notification-badge">3</span>
+                    🔔
+                </div>
+                <div class="user-profile">
+                    Admin User
+                </div>
+            </div>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-title">Total Sales</div>
+                <div class="stat-value">$24,589</div>
+                <div class="stat-trend trend-up">↑ 12% vs last month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Active Users</div>
+                <div class="stat-value">1,482</div>
+                <div class="stat-trend trend-up">↑ 8% vs last month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">New Orders</div>
+                <div class="stat-value">64</div>
+                <div class="stat-trend trend-down">↓ 3% vs last month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Revenue</div>
+                <div class="stat-value">$12,389</div>
+                <div class="stat-trend trend-up">↑ 15% vs last month</div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="chart-container">
+                <h2>Recent Orders</h2>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Product</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#12345</td>
+                            <td>John Doe</td>
+                            <td>Wireless Earbuds</td>
+                            <td>$129.99</td>
+                            <td><span class="status-badge completed">Completed</span></td>
+                            <td><button class="action-button">View</button></td>
+                        </tr>
+                        <tr>
+                            <td>#12346</td>
+                            <td>Jane Smith</td>
+                            <td>Smart Coffee Maker</td>
+                            <td>$149.99</td>
+                            <td><span class="status-badge pending">Pending</span></td>
+                            <td><button class="action-button">View</button></td>
+                        </tr>
+                        <tr>
+                            <td>#12347</td>
+                            <td>Mike Johnson</td>
+                            <td>4K Smart TV</td>
+                            <td>$599.99</td>
+                            <td><span class="status-badge cancelled">Cancelled</span></td>
+                            <td><button class="action-button">View</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="recent-activity">
+                <h2>Recent Activity</h2>
+                <div class="activity-item">
+                    <div class="activity-icon order">📦</div>
+                    <div class="activity-details">
+                        <h4>New Order Received</h4>
+                        <p>Order #12345 from John Doe</p>
+                        <small>2 minutes ago</small>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon user">👤</div>
+                    <div class="activity-details">
+                        <h4>New User Registration</h4>
+                        <p>Jane Smith joined the platform</p>
+                        <small>15 minutes ago</small>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon alert">⚠️</div>
+                    <div class="activity-details">
+                        <h4>Low Stock Alert</h4>
+                        <p>Wireless Earbuds (5 units left)</p>
+                        <small>1 hour ago</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Navigation active state
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html> 
